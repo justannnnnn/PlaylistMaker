@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="14dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/back"
+        android:background="@color/white"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:layout_marginTop="4dp"
+        android:text="@string/settings"
+        android:textColor="@color/black"
+        android:layout_marginStart="64dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:paddingStart="10dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dark_theme"
+                android:textSize="@dimen/small_text_size"
+                android:textColor="@color/black"
+                />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"/>
+        </FrameLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:text="@string/share_app"
+            android:id="@+id/shareButton"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:textAppearance="@color/black"
+            android:textSize="@dimen/small_text_size"
+            app:icon="@drawable/share"
+            app:iconGravity="end"
+            app:iconPadding="@dimen/icon_text"
+            app:iconTint="@color/grey"
+            android:paddingStart="0dp"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:text="@string/write_support"
+            android:id="@+id/supportButton"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:textAppearance="@color/black"
+            android:textSize="@dimen/small_text_size"
+            app:icon="@drawable/support"
+            app:iconGravity="end"
+            app:iconPadding="@dimen/icon_text"
+            app:iconTint="@color/grey"
+            android:paddingStart="0dp"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:text="@string/user_agreement"
+            android:id="@+id/agreementButton"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:textAllCaps="false"
+            android:textAlignment="textStart"
+            android:textAppearance="@color/black"
+            android:textSize="@dimen/small_text_size"
+            app:icon="@drawable/right_arrow"
+            app:iconGravity="end"
+            app:iconPadding="@dimen/icon_text"
+            app:iconTint="@color/grey"
+            android:paddingStart="0dp"
+            android:paddingEnd="20dp"
+            style="?android:attr/borderlessButtonStyle"
+            />
+
+
+
+
+    </LinearLayout>
+
+</FrameLayout>
