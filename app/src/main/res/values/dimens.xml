@@ -4,5 +4,6 @@
     <dimen name="small_text_size">16sp</dimen>
     <dimen name="radius">16dp</dimen>
     <dimen name="icon_text">8dp</dimen>
+    <dimen name="button_height">64dp</dimen>
 
 </resources>
