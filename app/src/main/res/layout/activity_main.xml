@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
     tools:context=".MainActivity"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -17,9 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        android:textColor="@color/white"
-        android:textSize="26sp"
-        android:textStyle="bold"/>
+        style="@style/PageTitleStyle"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,52 +26,21 @@
 
         <Button
             android:id="@+id/searchButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
+            style="@style/MainButtonStyle"
             android:text="@string/search"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/medium_text_size"
-            app:icon="@drawable/search"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/black"
-            app:cornerRadius="@dimen/radius"
-            />
+            app:icon="@drawable/search" />
 
         <Button
             android:id="@+id/mediaButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
+            style="@style/MainButtonStyle"
             android:text="@string/media"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/medium_text_size"
-            app:icon="@drawable/media"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/black"
-            app:cornerRadius="@dimen/radius"/>
+            app:icon="@drawable/media"/>
 
         <Button
             android:id="@+id/settingButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
+            style="@style/MainButtonStyle"
             android:text="@string/settings"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/medium_text_size"
-            app:icon="@drawable/settings"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/black"
-            app:cornerRadius="@dimen/radius"/>
+            app:icon="@drawable/settings"/>
 
 
     </LinearLayout>

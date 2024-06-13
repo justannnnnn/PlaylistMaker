@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+        <item name="cornerRadius">@dimen/radius</item>
+        <item name="iconPadding">@dimen/icon_text</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:textAppearance">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+    </style>
+
+    <style name="PageTitleStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/big_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="SmallTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+    
+    <style name="SettingsButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+        <item name="iconGravity">end</item>
+        <item name="iconPadding">@dimen/icon_text</item>
+        <item name="paddingStart">0dp</item>
+        <item name="iconTint">?attr/colorPrimaryVariant</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="buttonStyle">?attr/borderlessButtonStyle</item>
+    </style>
+
+    <style name="ImageButtonStyle" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:clickable">true</item>
+    </style>
+    
+</resources>

@@ -17,16 +17,14 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/back"
-            android:background="@color/white"
             android:contentDescription="backButton"
-            android:clickable="true"/>
+            style="@style/ImageButtonStyle"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="26sp"
+            style="@style/PageTitleStyle"
             android:layout_marginTop="4dp"
             android:text="@string/settings"
-            android:textColor="@color/black"
             />
     </LinearLayout>
 
@@ -39,8 +37,7 @@
         android:orientation="vertical">
 
         <FrameLayout
-            android:paddingBottom="15dp"
-            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -48,72 +45,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dark_theme"
-                android:textSize="@dimen/small_text_size"
-                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                style="@style/SmallTextViewStyle"
                 />
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"/>
+                android:layout_gravity="center_vertical|end"/>
         </FrameLayout>
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
             android:text="@string/share_app"
             android:id="@+id/shareButton"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textAlignment="textStart"
-            android:textAppearance="@color/black"
-            android:textSize="@dimen/small_text_size"
-            app:icon="@drawable/share"
-            app:iconGravity="end"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/grey"
             android:paddingStart="0dp"
-            style="?android:attr/borderlessButtonStyle"
+            app:icon="@drawable/share"
+            style="@style/SettingsButtonStyle"
             />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
             android:text="@string/write_support"
             android:id="@+id/supportButton"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textAlignment="textStart"
-            android:textAppearance="@color/black"
-            android:textSize="@dimen/small_text_size"
             app:icon="@drawable/support"
-            app:iconGravity="end"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/grey"
             android:paddingStart="0dp"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/SettingsButtonStyle"
             />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
             android:text="@string/user_agreement"
             android:id="@+id/agreementButton"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textAlignment="textStart"
-            android:textAppearance="@color/black"
-            android:textSize="@dimen/small_text_size"
             app:icon="@drawable/right_arrow"
-            app:iconGravity="end"
-            app:iconPadding="@dimen/icon_text"
-            app:iconTint="@color/grey"
             android:paddingStart="0dp"
             android:paddingEnd="20dp"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/SettingsButtonStyle"
             />
     </LinearLayout>
 
