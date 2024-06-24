@@ -6,5 +6,8 @@
     <dimen name="radius">16dp</dimen>
     <dimen name="icon_text">8dp</dimen>
     <dimen name="button_height">64dp</dimen>
-
+    <dimen name="icon_padding">12dp</dimen>
+    <dimen name="icon_size">16dp</dimen>
+    <dimen name="edit_text_height">36dp</dimen>
+    <dimen name="edit_text_button_margin">26dp</dimen>
 </resources>

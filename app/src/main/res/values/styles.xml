@@ -24,7 +24,7 @@
         <item name="android:textSize">@dimen/small_text_size</item>
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     
     <style name="SettingsButtonStyle" parent="Widget.AppCompat.Button.Borderless">
@@ -37,7 +37,7 @@
         <item name="iconGravity">end</item>
         <item name="iconPadding">@dimen/icon_text</item>
         <item name="paddingStart">0dp</item>
-        <item name="iconTint">?attr/colorPrimaryVariant</item>
+        <item name="iconTint">?attr/colorAccent</item>
         <item name="android:textFontWeight">400</item>
         <item name="buttonStyle">?attr/borderlessButtonStyle</item>
     </style>
@@ -46,6 +46,28 @@
         <item name="tint">?attr/colorOnPrimary</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="EditTextStyle" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:drawablePadding">@dimen/icon_text</item>
+        <item name="drawableTint">?attr/colorSecondaryVariant</item>
+        <item name="android:paddingStart">@dimen/icon_padding</item>
+        <item name="android:paddingEnd">@dimen/icon_padding</item>
+        <item name="android:textColorHint">?attr/colorSecondaryVariant</item>
+        <item name="android:background">@drawable/edit_text_bg</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+    </style>
+
+    <style name="EditTextButtonStyle" parent="Widget.MaterialComponents.TimePicker.ImageButton">
+        <item name="android:background">?attr/colorSecondary</item>
+        <item name="tint">?attr/colorSecondaryVariant</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">@dimen/icon_size</item>
+        <item name="android:layout_height">@dimen/icon_size</item>
+
     </style>
     
 </resources>
