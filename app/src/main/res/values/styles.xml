@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -58,7 +58,7 @@
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/small_text_size</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textColor">?attr/colorSecondaryVariant</item>
+        <item name="android:textColor">?attr/colorOnSecondaryFixed</item>
     </style>
 
     <style name="EditTextButtonStyle" parent="Widget.MaterialComponents.TimePicker.ImageButton">
