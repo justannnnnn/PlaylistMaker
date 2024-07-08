@@ -31,7 +31,7 @@
         <item name="android:textSize">@dimen/smallest_text_size</item>
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textColor">?attr/colorSurface</item>
     </style>
     
     <style name="SettingsButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -44,7 +44,7 @@
         <item name="iconGravity">end</item>
         <item name="iconPadding">@dimen/icon_text</item>
         <item name="paddingStart">0dp</item>
-        <item name="iconTint">?attr/colorAccent</item>
+        <item name="iconTint">?attr/colorSurface</item>
         <item name="android:textFontWeight">400</item>
         <item name="buttonStyle">?attr/borderlessButtonStyle</item>
     </style>

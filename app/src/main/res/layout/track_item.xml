@@ -24,7 +24,7 @@
         android:layout_margin="@dimen/icon_text"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="Yesterday(remastered)ldfvldkfmvldfvkdlkfddfvd"
+        tools:text="Yesterday(remastered)ldfvldkfmvldfvkdlkfddfvd"
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/imageView2"/>
@@ -36,7 +36,7 @@
         app:layout_constraintWidth_max="120dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/icon_text"
-        android:text="The Beatles(szkdjcnscs)"
+        tools:text="The Beatles(szkdjcnscs)"
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
@@ -46,10 +46,10 @@
         android:id="@+id/imageView"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
-        android:src="@drawable/icdot"
+        android:src="@drawable/ic_dot"
         app:layout_constraintStart_toEndOf="@+id/authorTextView"
         app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-        app:tint="?attr/colorAccent" />
+        app:tint="?attr/colorSurface" />
 
     <TextView
         android:id="@+id/durantionTextView"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-        android:text="2:25"
+        tools:text="2:25"
         android:maxLines="1"
         android:ellipsize="end"
         style="@style/SmallestTextViewStyle"/>
@@ -70,7 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/colorAccent" />
+        app:tint="?attr/colorSurface" />
 
 
 
