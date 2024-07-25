@@ -10,4 +10,6 @@
     <dimen name="icon_size">16dp</dimen>
     <dimen name="edit_text_height">36dp</dimen>
     <dimen name="edit_text_button_margin">26dp</dimen>
+    <dimen name="smallest_text_size">12dp</dimen>
+    <dimen name="rv_image">45dp</dimen>
 </resources>

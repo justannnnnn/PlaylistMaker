@@ -33,7 +33,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="colorAccent">@color/grey</item>
+        <item name="colorSurface">@color/grey</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:background">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
         <item name="colorOnSecondaryFixed">@color/black</item>
