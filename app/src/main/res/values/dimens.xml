@@ -2,8 +2,10 @@
 <resources>
     <dimen name="big_text_size">26sp</dimen>
     <dimen name="medium_text_size">22sp</dimen>
+    <dimen name="small_medium_text_size">19sp</dimen>
     <dimen name="small_text_size">16sp</dimen>
     <dimen name="radius">16dp</dimen>
+    <dimen name="big_radius">54dp</dimen>
     <dimen name="icon_text">8dp</dimen>
     <dimen name="button_height">64dp</dimen>
     <dimen name="icon_padding">12dp</dimen>
@@ -11,5 +13,7 @@
     <dimen name="edit_text_height">36dp</dimen>
     <dimen name="edit_text_button_margin">26dp</dimen>
     <dimen name="smallest_text_size">12dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="big_margin">24dp</dimen>
     <dimen name="rv_image">45dp</dimen>
 </resources>
