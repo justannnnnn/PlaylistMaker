@@ -38,9 +38,8 @@
     <style name="SmallMediumTextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/small_medium_text_size</item>
         <item name="android:textAppearance">@font/ys_display_medium</item>
-        <item name="android:textFontWeight">400</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="SmallestTextViewStyle" parent="Widget.AppCompat.TextView">

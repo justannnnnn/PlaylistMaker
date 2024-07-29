@@ -1,7 +1,6 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -12,17 +11,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,37 +44,53 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var refreshButton: Button
     private lateinit var recyclerView: RecyclerView
 
+    private val historyAdapter: TrackAdapter = TrackAdapter()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        val sharedPreferences = getSharedPreferences(App.PLAYLIST_PREFERENCES, MODE_PRIVATE)
+
+
+        // Back button
         val backButton = findViewById<ImageButton>(R.id.backButton)
         backButton.setOnClickListener {
             finish()
         }
 
+        // EditText for searching songs
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
+        val searchHistoryLL = findViewById<LinearLayout>(R.id.searchHistoryLL)
         val clearButton = findViewById<ImageButton>(R.id.clearButton)
-        searchEditText.addTextChangedListener(
-            onTextChanged = { text, start, before, count ->
+        searchEditText.addTextChangedListener( // listener for text changing
+            onTextChanged = { text, _, _, _ ->
                 if (!text.isNullOrEmpty()) clearButton.visibility = View.VISIBLE
                 else clearButton.visibility = View.INVISIBLE
+
+                searchText = text.toString()
+
+                // new track list for new search query
                 tracks.clear()
                 adapter.notifyDataSetChanged()
+
+                // visibility of placeholder and search history
                 placeholderLL.visibility = View.GONE
-                searchText = text.toString()
+                searchHistoryLL.visibility = if (searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
             }
         )
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        searchEditText.setOnEditorActionListener { _, actionId, _ -> // listener for DONE button on keyboard
             if (actionId == EditorInfo.IME_ACTION_DONE){
                 if (searchText.isNotEmpty()) search()
                 true
             }
             false
         }
-
+        searchEditText.setOnFocusChangeListener { v, hasFocus -> // listener for focus changing(just for searchHistory)
+            searchHistoryLL.visibility = if (hasFocus && searchEditText.text.isEmpty() && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
+        }
+        // clear button IN editText
         clearButton.setOnClickListener {
             searchEditText.text.clear()
             tracks.clear()
@@ -89,6 +99,24 @@ class SearchActivity : AppCompatActivity() {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(searchEditText.windowToken, 0)
         }
 
+        // search History
+        val searchHistoryRV = findViewById<RecyclerView>(R.id.searchHistoryRV)
+        val clearHistoryButton = findViewById<Button>(R.id.clearHistory)
+
+        //val historyAdapter = TrackAdapter()
+        val searchHistory = SearchHistory(sharedPreferences, historyAdapter) // instance of class searchHistory for working with historyTracks
+        historyAdapter.tracks = searchHistory.getTracks()
+        searchHistoryRV.adapter = historyAdapter
+        searchHistoryRV.layoutManager = LinearLayoutManager(this)
+
+        // clearHistory button
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clearHistory()
+            historyAdapter.notifyDataSetChanged()
+            searchHistoryLL.visibility = View.GONE
+        }
+
+        // placeholder(nothing found or bad internet)
         placeholderLL = findViewById(R.id.placeholderLL)
         placeholderLL.visibility = View.GONE
         placeholderImageView = findViewById(R.id.placeholderIV)
@@ -159,6 +187,7 @@ class SearchActivity : AppCompatActivity() {
     companion object{
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
+
     }
 
 }
