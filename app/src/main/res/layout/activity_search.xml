@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchActivity"
-    android:layout_margin="16dp">
+    android:layout_margin="16dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
         <ImageButton
             android:id="@+id/backButton"
             android:layout_width="48dp"
@@ -45,7 +44,6 @@
             android:drawableStart="@drawable/search"
             android:hint="@string/search"
             android:inputType="text"
-            android:maxLines="1"
             android:layout_marginRight="@dimen/edit_text_button_margin"
             style="@style/EditTextStyle">
         </EditText>
@@ -61,15 +59,57 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchRecyclerView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@id/searchLayout"
-        android:layout_marginTop="24dp"
-        />
+        android:layout_marginTop="24dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/searchLayout"
+            />
+
+        <LinearLayout
+            android:id="@+id/placeholderLL"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            
+            <ImageView
+                android:id="@+id/placeholderIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/nothing_found"
+                />
+
+            <TextView
+                android:id="@+id/placeholderTextView"
+                android:layout_marginTop="@dimen/medium_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/net_problems"
+                android:textAlignment="center"
+                style="@style/SmallMediumTextViewStyle"/>
+            
+            <Button
+                android:id="@+id/refreshButton"
+                android:layout_marginTop="@dimen/big_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                style="@style/StandartButtonStyle"
+                />
+        </LinearLayout>
+
+    </FrameLayout>
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
