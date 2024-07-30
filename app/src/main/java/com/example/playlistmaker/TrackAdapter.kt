@@ -1,8 +1,8 @@
 package com.example.playlistmaker
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 
 class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>(){
 
@@ -16,6 +16,13 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>(){
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
+        holder.itemView.setOnClickListener {
+            val sp = it.context.getSharedPreferences("playlist_prefs", 0)
+            sp.edit()
+                .putString(App.NEW_VAL_KEY, Gson().toJson(tracks[position]))
+                .apply()
+        }
     }
+
 
 }
