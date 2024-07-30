@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -62,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
 
         // EditText for searching songs
         val searchEditText = findViewById<EditText>(R.id.searchEditText)
-        val searchHistoryLL = findViewById<LinearLayout>(R.id.searchHistoryLL)
+        val searchHistoryLL = findViewById<ScrollView>(R.id.searchHistoryLL)
         val clearButton = findViewById<ImageButton>(R.id.clearButton)
         searchEditText.addTextChangedListener( // listener for text changing
             onTextChanged = { text, _, _, _ ->

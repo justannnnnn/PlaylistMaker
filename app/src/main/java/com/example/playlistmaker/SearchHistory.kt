@@ -17,11 +17,11 @@ class SearchHistory(val data: SharedPreferences, val adapter: TrackAdapter) {
                     tracks.removeAt(ind)
                     adapter.notifyItemRemoved(ind)
                 }
-                if (tracks.size == 10) {
+                /*if (tracks.size == 10) {
                     val ind = tracks.size - 1
                     tracks.removeAt(ind)
                     adapter.notifyItemRemoved(ind)
-                }
+                }*/
                 tracks.add(0, track)
                 adapter.notifyItemInserted(0)
                 sp.edit()

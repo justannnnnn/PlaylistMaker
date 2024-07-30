@@ -109,9 +109,13 @@
                 />
         </LinearLayout>
 
-        <LinearLayout
+        <ScrollView
             android:id="@+id/searchHistoryLL"
-            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -135,8 +139,9 @@
                 android:text="@string/clear_history"
                 android:layout_gravity="center"
                 style="@style/StandartButtonStyle"/>
+            </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
     </FrameLayout>
 
