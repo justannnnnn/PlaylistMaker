@@ -1,4 +1,5 @@
 package com.example.playlistmaker
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,8 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>(){
             sp.edit()
                 .putString(App.NEW_VAL_KEY, Gson().toJson(tracks[position]))
                 .apply()
+            val intent = Intent(it.context, PlayerActivity::class.java)
+            it.context.startActivity(intent)
         }
     }
 
