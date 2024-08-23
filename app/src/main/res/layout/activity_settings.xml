@@ -36,25 +36,13 @@
         android:paddingStart="10dp"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:paddingBottom="10dp"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
+            android:text="@string/dark_theme"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dark_theme"
-                android:layout_gravity="center_vertical"
-                style="@style/SmallTextViewStyle"
-                />
-
-            <Switch
-                android:id="@+id/themeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|end"/>
-        </FrameLayout>
+            android:layout_height="wrap_content"
+            style="@style/SwitcherStyle"
+            />
 
         <Button
             android:text="@string/share_app"
