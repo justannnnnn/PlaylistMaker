@@ -40,13 +40,11 @@ class PlayerActivity : AppCompatActivity() {
         val genre = findViewById<TextView>(R.id.genreTextView)
         val country = findViewById<TextView>(R.id.countryTextView)
 
-        val sp = getSharedPreferences(App.PLAYLIST_PREFERENCES, MODE_PRIVATE)
-        val trackStr = sp.getString(App.NEW_VAL_KEY, null)
-        val track = Gson().fromJson(trackStr, Track::class.java)
+        val track = intent.getSerializableExtra("selected_track") as Track
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
-            .placeholder(R.drawable.empty_cover_big)
+            .placeholder(R.drawable.empty_cover)
             .transform(RoundedCorners(dpToPx(8f, this)))
             .into(cover)
         trackName.text = track.trackName

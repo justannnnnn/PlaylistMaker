@@ -23,6 +23,7 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>(){
                 .putString(App.NEW_VAL_KEY, Gson().toJson(tracks[position]))
                 .apply()
             val intent = Intent(it.context, PlayerActivity::class.java)
+            intent.putExtra("selected_track", tracks[position])
             it.context.startActivity(intent)
         }
     }
