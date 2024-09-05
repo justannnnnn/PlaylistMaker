@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -10,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -44,9 +47,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderImageView: ImageView
     private lateinit var refreshButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     private val historyAdapter: TrackAdapter = TrackAdapter()
-
+    private val searchRunnable = Runnable{search()}
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,15 +84,11 @@ class SearchActivity : AppCompatActivity() {
                 // visibility of placeholder and search history
                 placeholderLL.visibility = View.GONE
                 searchHistoryLL.visibility = if (searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
+
+                searchDebounce()
             }
         )
-        searchEditText.setOnEditorActionListener { _, actionId, _ -> // listener for DONE button on keyboard
-            if (actionId == EditorInfo.IME_ACTION_DONE){
-                if (searchText.isNotEmpty()) search()
-                true
-            }
-            false
-        }
+
         searchEditText.setOnFocusChangeListener { v, hasFocus -> // listener for focus changing(just for searchHistory)
             searchHistoryLL.visibility = if (hasFocus && searchEditText.text.isEmpty() && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
@@ -131,6 +132,8 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracks
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        progressBar = findViewById(R.id.progressBar)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -144,12 +147,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search(){
+
+        placeholderLL.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+
         tracksService.searchSongs(searchText)
             .enqueue(object : Callback<TrackSearchResponse> {
                 override fun onResponse(
                     call: Call<TrackSearchResponse>,
                     response: Response<TrackSearchResponse>
                 ) {
+                    progressBar.visibility = View.GONE
                     if (response.code() == 200){
                         if (response.body()?.results?.isNotEmpty() == true){
                             showPlaceholder(null, null)
@@ -181,14 +190,18 @@ class SearchActivity : AppCompatActivity() {
         }
         else{
             placeholderLL.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
         }
     }
 
-
+    private fun searchDebounce(){
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
     companion object{
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
-
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
 }

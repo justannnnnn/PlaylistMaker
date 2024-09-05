@@ -109,6 +109,13 @@
                 />
         </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/ProgressBarStyle"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="140dp"
+            android:visibility="gone"/>
+
         <ScrollView
             android:id="@+id/searchHistoryLL"
             android:layout_height="match_parent"
