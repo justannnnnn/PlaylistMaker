@@ -24,6 +24,8 @@ import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
+    private val gson = Gson()
+
     private lateinit var playButton: ImageButton
     private lateinit var timer: TextView
     private var mainThreadHandler: Handler? = null
@@ -52,7 +54,7 @@ class PlayerActivity : AppCompatActivity() {
         val genre = findViewById<TextView>(R.id.genreTextView)
         val country = findViewById<TextView>(R.id.countryTextView)
 
-        val track = intent.getSerializableExtra("selected_track") as Track
+        val track = intent.getSerializableExtra(App.SELECTED_TRACK) as Track
 
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
@@ -86,6 +88,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mainThreadHandler?.removeCallbacksAndMessages(null)
         mediaPlayer.release()
     }
 
@@ -113,12 +116,13 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageDrawable(getDrawable(R.drawable.pause))
         playerState = STATE_PLAYING
-        startTimer(durationTrack)
+        startTimer()
     }
 
     private fun pausePlayer(){
         mediaPlayer.pause()
         playButton.setImageDrawable(getDrawable(R.drawable.play))
+        mainThreadHandler?.removeCallbacksAndMessages(null)
         playerState = STATE_PAUSED
 
     }
@@ -126,37 +130,23 @@ class PlayerActivity : AppCompatActivity() {
     private fun playbackControl(){
         when(playerState){
             STATE_PLAYING -> pausePlayer()
-            STATE_PREPARED ->{
-                startPlayer()
-                durationTrack = 30L
-                startTimer(durationTrack)
-            }
-            STATE_PAUSED -> startPlayer()
+            STATE_PREPARED, STATE_PAUSED -> startPlayer()
         }
     }
 
-    private fun startTimer(duration: Long){
-        var startTime = System.currentTimeMillis()
-        mainThreadHandler?.post(createUpdateTimerTask(startTime, duration * 1000L))
+    private fun startTimer(){
+        mainThreadHandler?.post(createUpdateTimerTask())
     }
 
-    private fun createUpdateTimerTask(startTime: Long, duration: Long): Runnable{
+    private fun createUpdateTimerTask(): Runnable{
         return object : Runnable{
             override fun run() {
-                val elapsedTime = System.currentTimeMillis() - startTime
-                val remain = duration - elapsedTime
+                val remain = mediaPlayer.currentPosition
 
                 if (playerState == STATE_PLAYING){
-                    if (remain > 0){
-                        durationTrack = remain / 1000L
                         val seconds = remain / 1000L
                         timer.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
                         mainThreadHandler?.postDelayed(this, 1000L)
-                    }
-                    else {
-                        timer.text = "00:00"
-
-                    }
                 }
             }
         }

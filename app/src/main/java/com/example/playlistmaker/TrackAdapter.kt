@@ -25,7 +25,7 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>(){
             if (clickDebounce()) {
                 val sp = it.context.getSharedPreferences("playlist_prefs", 0)
                 sp.edit()
-                    .putString(App.NEW_VAL_KEY, Gson().toJson(tracks[position]))
+                    .putString(App.NEW_VAL_KEY, App.gson.toJson(tracks[position]))
                     .apply()
                 val intent = Intent(it.context, PlayerActivity::class.java)
                 intent.putExtra("selected_track", tracks[position])
