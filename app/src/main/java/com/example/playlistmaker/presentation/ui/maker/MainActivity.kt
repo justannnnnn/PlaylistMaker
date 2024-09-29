@@ -1,10 +1,14 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.maker
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.ui.media.MediaActivity
+import com.example.playlistmaker.presentation.ui.search.SearchActivity
+import com.example.playlistmaker.presentation.ui.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,9 +20,6 @@ class MainActivity : AppCompatActivity() {
         getDecorView().
         setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
-        // setting theme
-        (application as App).switchTheme(getSharedPreferences(App.PLAYLIST_PREFERENCES, MODE_PRIVATE)
-            .getBoolean(App.IS_DARK_THEME, false))
 
         val searchButton = findViewById<Button>(R.id.searchButton)
         val mediaButton = findViewById<Button>(R.id.mediaButton)
