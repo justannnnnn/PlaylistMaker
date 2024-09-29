@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.gson.Gson
 
 class App : Application() {
     var darkTheme = false
@@ -23,5 +24,10 @@ class App : Application() {
         // search history
         const val LIST_KEY = "LIST_KEY" // search history list
         const val NEW_VAL_KEY = "NEW_VAL_KEY" // new track into search history list
+
+        //intent's extra keys
+        const val SELECTED_TRACK = "selected_track"
+
+        val gson = Gson()
     }
 }
