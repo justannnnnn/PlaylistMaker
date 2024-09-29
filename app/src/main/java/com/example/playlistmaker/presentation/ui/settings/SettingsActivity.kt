@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -6,9 +6,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.presentation.theme_manager.ThemeManager
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var switcher: SwitchMaterial
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -18,16 +22,7 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        val sharedPrefs = getSharedPreferences(App.PLAYLIST_PREFERENCES, MODE_PRIVATE)
-        themeSwitcher.isChecked = sharedPrefs.getBoolean(App.IS_DARK_THEME, false)
-        themeSwitcher.setOnCheckedChangeListener { switcher, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
-            sharedPrefs.edit()
-                .putBoolean(App.IS_DARK_THEME, isChecked)
-                .apply()
-        }
-
+        switcher = findViewById(R.id.themeSwitcher)
 
         val shareButton = findViewById<Button>(R.id.shareButton)
         shareButton.setOnClickListener {
@@ -52,6 +47,18 @@ class SettingsActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(getString(R.string.agreement_uri))
             startActivity(intent)
+        }
+
+        initializationSwitch()
+        switcher.isChecked = ThemeManager.isDarkTheme()
+    }
+
+    private fun initializationSwitch(){
+        switcher.setOnCheckedChangeListener{_, isChecked ->
+            if (isChecked != ThemeManager.isDarkTheme()){
+                ThemeManager.switchTheme(isChecked)
+                recreate()
+            }
         }
     }
 }
