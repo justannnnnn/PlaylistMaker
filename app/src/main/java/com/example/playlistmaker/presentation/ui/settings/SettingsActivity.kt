@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.theme_manager.ThemeManager
+import com.example.playlistmaker.domain.api.ThemeInteractor
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var switcher: SwitchMaterial
+    private lateinit var themeInteractor: ThemeInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +26,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         switcher = findViewById(R.id.themeSwitcher)
+        themeInteractor = Creator.provideThemeInteractor()
 
         val shareButton = findViewById<Button>(R.id.shareButton)
         shareButton.setOnClickListener {
@@ -50,13 +54,21 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         initializationSwitch()
-        switcher.isChecked = ThemeManager.isDarkTheme()
+        switcher.isChecked = themeInteractor.isDarkTheme()
     }
 
     private fun initializationSwitch(){
         switcher.setOnCheckedChangeListener{_, isChecked ->
-            if (isChecked != ThemeManager.isDarkTheme()){
-                ThemeManager.switchTheme(isChecked)
+            if (isChecked != themeInteractor.isDarkTheme()){
+                themeInteractor.setTheme(isChecked)
+                themeInteractor.applyTheme(object: ThemeInteractor.ThemeConsumer{
+                    override fun consume(isDark: Boolean) {
+                        AppCompatDelegate.setDefaultNightMode(
+                            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+                            else AppCompatDelegate.MODE_NIGHT_NO
+                        )
+                    }
+                })
                 recreate()
             }
         }

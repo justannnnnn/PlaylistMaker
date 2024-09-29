@@ -5,13 +5,13 @@ import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
-class SearchHistoryRepositoryImpl(private val sp: SharedPreferences): SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(private val prefs: SharedPreferences): SearchHistoryRepository {
 
     private val historyTracks = ArrayList<Track>()
     private val gson = Gson()
 
     init{
-        val str = sp.getString(LIST_KEY, "")
+        val str = prefs.getString(LIST_KEY, "")
         if (!str.isNullOrEmpty()) historyTracks.addAll(gson.fromJson(str, Array<Track>::class.java).toList())
     }
 
@@ -21,14 +21,14 @@ class SearchHistoryRepositoryImpl(private val sp: SharedPreferences): SearchHist
             historyTracks.removeLast()
         }
         historyTracks.add(0, track)
-        sp.edit().putString(LIST_KEY, gson.toJson(historyTracks)).apply()
+        prefs.edit().putString(LIST_KEY, gson.toJson(historyTracks)).apply()
     }
 
     override fun getSearchHistory(): List<Track> = historyTracks
 
     override fun clearSearchHistory() {
         historyTracks.clear()
-        sp.edit().remove(LIST_KEY).apply()
+        prefs.edit().remove(LIST_KEY).apply()
     }
 
 

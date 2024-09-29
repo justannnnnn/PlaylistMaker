@@ -3,13 +3,13 @@ package com.example.playlistmaker.data
 import android.content.SharedPreferences
 import com.example.playlistmaker.domain.api.ThemeRepository
 
-class SharedPreferencesRepositoryImpl(private val sp: SharedPreferences): ThemeRepository {
+class ThemeRepositoryImpl(private val prefs: SharedPreferences): ThemeRepository {
     override fun isDarkTheme(): Boolean {
-        return sp.getBoolean(IS_DARK_THEME, false)
+        return prefs.getBoolean(IS_DARK_THEME, false)
     }
 
     override fun setDarkTheme(isDark: Boolean) {
-        sp.edit().putBoolean(IS_DARK_THEME, isDark).apply()
+        prefs.edit().putBoolean(IS_DARK_THEME, isDark).apply()
     }
 
     private companion object{

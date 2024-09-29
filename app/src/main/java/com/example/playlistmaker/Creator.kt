@@ -3,13 +3,17 @@ package com.example.playlistmaker
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
-import com.example.playlistmaker.data.SharedPreferencesRepositoryImpl
+import com.example.playlistmaker.data.ThemeRepositoryImpl
 import com.example.playlistmaker.data.TrackRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.domain.api.ThemeInteractor
 import com.example.playlistmaker.domain.api.ThemeRepository
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.api.TrackRepository
+import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
+import com.example.playlistmaker.domain.impl.ThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.TrackInteractorImpl
 
 object Creator {
@@ -29,11 +33,21 @@ object Creator {
         val repository = provideTrackRepository()
         return TrackInteractorImpl(repository)
     }
-    fun providePrefsRepository(): ThemeRepository = SharedPreferencesRepositoryImpl(provideSharedPrefs(
+    private fun provideThemeRepository(): ThemeRepository = ThemeRepositoryImpl(provideSharedPrefs(
         PLAYLIST_PREFERENCES))
 
-    fun provideSearchHistoryRepository(): SearchHistoryRepository = SearchHistoryRepositoryImpl(provideSharedPrefs(
+    fun provideThemeInteractor(): ThemeInteractor{
+        val repository = provideThemeRepository()
+        return ThemeInteractorImpl(repository)
+    }
+
+    private fun provideSearchHistoryRepository(): SearchHistoryRepository = SearchHistoryRepositoryImpl(provideSharedPrefs(
         HISTORY_TRACKLIST))
+
+    fun provideHistoryInteractor() : SearchHistoryInteractor{
+        val repository = provideSearchHistoryRepository()
+        return SearchHistoryInteractorImpl(repository)
+    }
 
     private fun provideSharedPrefs(key: String): SharedPreferences = applicationContext.getSharedPreferences(key, Context.MODE_PRIVATE)
 }

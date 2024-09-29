@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -23,19 +24,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.ui.maker.TrackAdapter
 import com.example.playlistmaker.presentation.ui.player.PlayerActivity
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var searchHistoryRepository: SearchHistoryRepository
     private lateinit var interactor: TrackInteractor
+    private lateinit var historyInteractor: SearchHistoryInteractor
     private val handler: Handler = Handler(Looper.getMainLooper())
     private lateinit var searchRunnable: Runnable
     private lateinit var progressBar: ProgressBar
+    private lateinit var historyDefaultConsumer: SearchHistoryInteractor.SearchHistoryConsumer
 
     private var searchText: String? = null
     private lateinit var placeholderLL: LinearLayout
@@ -62,8 +63,18 @@ class SearchActivity : AppCompatActivity() {
         }
 
         interactor = Creator.provideTrackInteractor()
-        searchHistoryRepository = Creator.provideSearchHistoryRepository()
+        historyInteractor = Creator.provideHistoryInteractor()
         searchRunnable = Runnable { search() }
+        historyDefaultConsumer = object: SearchHistoryInteractor.SearchHistoryConsumer{
+            override fun consume(historyTracks: ArrayList<Track>) {
+                historyAdapter.tracks = historyTracks
+                historyAdapter.notifyDataSetChanged()
+            }
+
+            override fun onError(errorMessage: String) {
+                Log.e("ERROR", errorMessage)
+            }
+        }
 
         // EditText for searching songs
         searchEditText = findViewById(R.id.searchEditText)
@@ -82,7 +93,7 @@ class SearchActivity : AppCompatActivity() {
 
         // clearHistory button
         clearHistoryButton.setOnClickListener {
-            searchHistoryRepository.clearSearchHistory()
+            historyInteractor.clearSearchHistory()
             updateHistoryRV()
             placeholderLL.visibility = View.GONE
             recyclerView.visibility = View.GONE
@@ -144,7 +155,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         val searchHistoryRV = findViewById<RecyclerView>(R.id.searchHistoryRV)
-        historyAdapter.tracks = ArrayList(searchHistoryRepository.getSearchHistory())
+        historyInteractor.getHistory(historyDefaultConsumer)
         searchHistoryRV.adapter = historyAdapter
         searchHistoryRV.layoutManager = LinearLayoutManager(this)
     }
@@ -209,7 +220,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun handleTrackClick(track: Track){
-        searchHistoryRepository.saveSearchHistory(track)
+        historyInteractor.saveHistory(track)
         updateHistoryRV()
 
         val intent = Intent(this, PlayerActivity::class.java)
@@ -218,8 +229,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun updateHistoryRV(){
-        historyAdapter.tracks = ArrayList(searchHistoryRepository.getSearchHistory())
-        historyAdapter.notifyDataSetChanged()
+        historyInteractor.getHistory(historyDefaultConsumer)
         val isHistoryEmpty = historyAdapter.tracks.isEmpty()
 
         searchHistoryLL.visibility = if (isHistoryEmpty || searchEditText.hasFocus())

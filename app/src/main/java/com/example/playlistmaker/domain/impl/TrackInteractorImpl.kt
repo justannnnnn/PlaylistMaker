@@ -8,11 +8,11 @@ import java.util.concurrent.Executors
 class TrackInteractorImpl(private val repository: TrackRepository) : TrackInteractor {
 
     private val executor = Executors.newCachedThreadPool()
-    override fun searchTracks(term: String, consumer: TrackInteractor.TrackConsumer) {
+    override fun searchTracks(expr: String, consumer: TrackInteractor.TrackConsumer) {
         executor.execute {
             try {
-                val tracks = repository.searchTracks(term)
-                if (tracks!!.isEmpty()) {
+                val tracks = repository.searchTracks(expr)
+                if (tracks.isNullOrEmpty()) {
                     consumer.consume(ArrayList())
                 } else {
                     consumer.consume(ArrayList(tracks))
