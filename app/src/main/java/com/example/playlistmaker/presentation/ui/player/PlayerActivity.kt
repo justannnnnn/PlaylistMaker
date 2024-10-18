@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.player
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -10,29 +10,33 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Group
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.gson.Gson
-import kotlinx.coroutines.Delay
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val gson = Gson()
-
     private lateinit var playButton: ImageButton
     private lateinit var timer: TextView
-    private var mainThreadHandler: Handler? = null
-    private var durationTrack = 30L
-
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
     private var mediaPlayer = MediaPlayer()
     private var playerState = STATE_DEFAULT
+
+    private val updateTimeRunnable = object: Runnable{
+        override fun run() {
+            if (playerState == STATE_PLAYING){
+                val currentPos = mediaPlayer.currentPosition
+                timer.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPos)
+                mainThreadHandler.postDelayed(this, 1000)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
@@ -54,8 +58,9 @@ class PlayerActivity : AppCompatActivity() {
         val genre = findViewById<TextView>(R.id.genreTextView)
         val country = findViewById<TextView>(R.id.countryTextView)
 
-        val track = intent.getSerializableExtra(App.SELECTED_TRACK) as Track
 
+
+        val track = intent.getSerializableExtra("selected_track") as Track
         Glide.with(this)
             .load(track.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg"))
             .placeholder(R.drawable.empty_cover)
@@ -63,22 +68,21 @@ class PlayerActivity : AppCompatActivity() {
             .into(cover)
         trackName.text = track.trackName
         author.text = track.artistName
-        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format((track.trackTime).toLong())
+        duration.text = track.trackTime
         if (track.collectionName == null) albumGroup.visibility = View.GONE
         else {
             albumGroup.visibility = View.VISIBLE
             album.text = track.collectionName
         }
-        year.text = track.releaseDate.subSequence(0, 4)
+        year.text = track.releaseDate?.subSequence(0, 4) ?: ""
         genre.text = track.primaryGenreName
         country.text = track.country
 
-        playButton = findViewById<ImageButton>(R.id.playButton)
-        preparePlayer(track.previewUrl)
-        playButton.setOnClickListener { playbackControl() }
+        playButton = findViewById(R.id.playButton)
 
+        track.previewUrl?.let { preparePlayer(it) }
+        playButton.setOnClickListener { playbackControl() }
         timer = findViewById(R.id.timerTextView)
-        mainThreadHandler = Handler(Looper.getMainLooper())
     }
 
     override fun onPause() {
@@ -88,7 +92,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mainThreadHandler?.removeCallbacksAndMessages(null)
+        mainThreadHandler.removeCallbacksAndMessages(null)
         mediaPlayer.release()
     }
 
@@ -108,6 +112,8 @@ class PlayerActivity : AppCompatActivity() {
         }
         mediaPlayer.setOnCompletionListener {
             playButton.setImageDrawable(getDrawable(R.drawable.play))
+            mainThreadHandler.removeCallbacks(updateTimeRunnable)
+            timer.text = getString(R.string.zero_time)
             playerState = STATE_PREPARED
         }
     }
@@ -116,13 +122,13 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageDrawable(getDrawable(R.drawable.pause))
         playerState = STATE_PLAYING
-        startTimer()
+        mainThreadHandler.post(updateTimeRunnable)
     }
 
     private fun pausePlayer(){
         mediaPlayer.pause()
         playButton.setImageDrawable(getDrawable(R.drawable.play))
-        mainThreadHandler?.removeCallbacksAndMessages(null)
+        mainThreadHandler.removeCallbacks(updateTimeRunnable)
         playerState = STATE_PAUSED
 
     }
@@ -131,24 +137,6 @@ class PlayerActivity : AppCompatActivity() {
         when(playerState){
             STATE_PLAYING -> pausePlayer()
             STATE_PREPARED, STATE_PAUSED -> startPlayer()
-        }
-    }
-
-    private fun startTimer(){
-        mainThreadHandler?.post(createUpdateTimerTask())
-    }
-
-    private fun createUpdateTimerTask(): Runnable{
-        return object : Runnable{
-            override fun run() {
-                val remain = mediaPlayer.currentPosition
-
-                if (playerState == STATE_PLAYING){
-                        val seconds = remain / 1000L
-                        timer.text = String.format("%02d:%02d", seconds / 60, seconds % 60)
-                        mainThreadHandler?.postDelayed(this, 1000L)
-                }
-            }
         }
     }
 

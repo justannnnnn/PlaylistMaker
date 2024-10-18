@@ -1,18 +1,16 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.search
 
 import android.content.Context
-import android.os.Build
 import android.util.TypedValue
-import android.view.RoundedCorner
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
+
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val trackTextView: TextView = itemView.findViewById(R.id.trackNameTextView)
@@ -23,7 +21,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: Track){
         trackTextView.text = model.trackName
         authorTextView.text = model.artistName
-        durationTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format((model.trackTime).toLong())
+        durationTextView.text = model.trackTime
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.empty_cover)
