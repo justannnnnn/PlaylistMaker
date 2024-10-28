@@ -2,30 +2,12 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.media.MediaPlayer
 import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.domain.settings.SettingsInteractor
-import com.example.playlistmaker.domain.sharing.SharingInteractor
 import com.example.playlistmaker.ui.player.model.PlayerState
-import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 
-class PlayerViewModel: ViewModel() {
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel()
-            }
-        }
-    }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val mediaPlayer = MediaPlayer()
+class PlayerViewModel(private val handler: Handler, private val mediaPlayer: MediaPlayer): ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default)
     private val timerValue = MutableLiveData<Int>()
 

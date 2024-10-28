@@ -5,10 +5,9 @@ import com.example.playlistmaker.data.search.SearchHistoryRepository
 import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.Gson
 
-class SearchHistoryRepositoryImpl(private val prefs: SharedPreferences): SearchHistoryRepository {
+class SearchHistoryRepositoryImpl(private val prefs: SharedPreferences, private val gson : Gson): SearchHistoryRepository {
 
     private val historyTracks = ArrayList<Track>()
-    private val gson = Gson()
 
     init{
         val str = prefs.getString(LIST_KEY, "")
@@ -30,8 +29,6 @@ class SearchHistoryRepositoryImpl(private val prefs: SharedPreferences): SearchH
         historyTracks.clear()
         prefs.edit().remove(LIST_KEY).apply()
     }
-
-
 
         private companion object {
         // search history
