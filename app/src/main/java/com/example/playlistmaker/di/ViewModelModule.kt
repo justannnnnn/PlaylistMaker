@@ -16,7 +16,7 @@ val viewModelModule = module{
         Handler(Looper.getMainLooper())
     }
 
-    single{
+    factory{
         MediaPlayer()
     }
 

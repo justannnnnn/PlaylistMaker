@@ -29,38 +29,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@id/imageView2"/>
 
-    <TextView
-        android:id="@+id/authorTextView"
-        style="@style/SmallestTextViewStyle"
-        android:layout_width="0dp"
-        app:layout_constraintWidth_max="120dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/icon_text"
-        tools:text="The Beatles(szkdjcnscs)"
-        android:maxLines="1"
-        android:ellipsize="end"
+        android:orientation="horizontal"
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
-        app:layout_constraintTop_toBottomOf="@+id/trackNameTextView" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:src="@drawable/ic_dot"
-        app:layout_constraintStart_toEndOf="@+id/authorTextView"
         app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-        app:tint="?attr/colorSurface" />
+        android:layout_marginLeft="@dimen/icon_text">
 
-    <TextView
-        android:id="@+id/durantionTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-        tools:text="2:25"
-        android:maxLines="1"
-        android:ellipsize="end"
-        style="@style/SmallestTextViewStyle"/>
+        <TextView
+            android:id="@+id/authorTextView"
+            style="@style/SmallestTextViewStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="The Beatles(szkdjcnscs)"
+            android:maxWidth="120dp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/ic_dot"
+            app:layout_constraintStart_toEndOf="@+id/authorTextView"
+            app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
+            app:tint="?attr/colorSurface" />
+
+        <TextView
+            android:id="@+id/durantionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
+            tools:text="2:25"
+            android:maxLines="1"
+            android:ellipsize="end"
+            style="@style/SmallestTextViewStyle"/>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView2"

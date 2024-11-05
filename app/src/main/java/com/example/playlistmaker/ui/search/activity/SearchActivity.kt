@@ -25,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler: Handler = getKoin().get()
 
-    private var searchText: String = ""
+    private var textForSearch: String = ""
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
     private val historyAdapter: TrackAdapter = TrackAdapter()
@@ -86,10 +86,10 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { text, _, _, _ ->
                 adapter.tracks.clear()
                 adapter.notifyDataSetChanged()
-                if (text != null) {
+                if (!text.isNullOrEmpty()) {
                     binding.clearButton.visibility = View.VISIBLE
-                    searchText = text.toString()
-                    viewModel.searchDebounce(searchText)
+                    textForSearch = text.toString()
+                    viewModel.searchDebounce(textForSearch)
                 }
                 else {
                     binding.clearButton.visibility = View.INVISIBLE
@@ -107,8 +107,8 @@ class SearchActivity : AppCompatActivity() {
         // placeholder(nothing found or bad internet)
         binding.placeholderLL.visibility = View.GONE
         binding.refreshButton.setOnClickListener {
-            if (searchText != "")
-                viewModel.searchDebounce(searchText)
+            if (textForSearch != "")
+                viewModel.searchDebounce(textForSearch)
         }
 
         clickDebounce()
@@ -116,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun render(state: TracksState){
-        if (state !is TracksState.Loading) searchText = ""
+        if (state !is TracksState.Loading && state !is TracksState.Error) textForSearch = ""
         when (state){
             is TracksState.Content -> showContent(state.tracks)
             is TracksState.Empty -> showEmpty()
@@ -169,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT, searchText)
+        outState.putString(SEARCH_TEXT, textForSearch)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
