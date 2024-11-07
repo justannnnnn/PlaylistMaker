@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
@@ -20,12 +18,14 @@ import com.example.playlistmaker.ui.search.TrackAdapter
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.model.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private val handler: Handler = Handler(Looper.getMainLooper())
+    private val handler: Handler = getKoin().get()
 
-    private var searchText: String = ""
+    private var textForSearch: String = ""
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
     private val historyAdapter: TrackAdapter = TrackAdapter()
@@ -33,15 +33,13 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this, SearchViewModel.getViewModelFactory())[SearchViewModel::class.java]
 
         // Back button
         binding.backButton.setOnClickListener {
@@ -88,10 +86,10 @@ class SearchActivity : AppCompatActivity() {
             onTextChanged = { text, _, _, _ ->
                 adapter.tracks.clear()
                 adapter.notifyDataSetChanged()
-                if (text != null) {
+                if (!text.isNullOrEmpty()) {
                     binding.clearButton.visibility = View.VISIBLE
-                    searchText = text.toString()
-                    viewModel.searchDebounce(searchText)
+                    textForSearch = text.toString()
+                    viewModel.searchDebounce(textForSearch)
                 }
                 else {
                     binding.clearButton.visibility = View.INVISIBLE
@@ -109,8 +107,8 @@ class SearchActivity : AppCompatActivity() {
         // placeholder(nothing found or bad internet)
         binding.placeholderLL.visibility = View.GONE
         binding.refreshButton.setOnClickListener {
-            if (searchText != "")
-                viewModel.searchDebounce(searchText)
+            if (textForSearch != "")
+                viewModel.searchDebounce(textForSearch)
         }
 
         clickDebounce()
@@ -118,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun render(state: TracksState){
-        if (state !is TracksState.Loading) searchText = ""
+        if (state !is TracksState.Loading && state !is TracksState.Error) textForSearch = ""
         when (state){
             is TracksState.Content -> showContent(state.tracks)
             is TracksState.Empty -> showEmpty()
@@ -171,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT, searchText)
+        outState.putString(SEARCH_TEXT, textForSearch)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
