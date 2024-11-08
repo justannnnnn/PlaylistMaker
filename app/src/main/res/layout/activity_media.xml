@@ -8,6 +8,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.media.activity.MediaActivity">
 
 
@@ -27,7 +28,7 @@
             style="@style/PageTitleStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_gravity="center"
             android:text="@string/media" />
     </LinearLayout>
 

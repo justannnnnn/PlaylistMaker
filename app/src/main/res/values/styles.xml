@@ -115,6 +115,7 @@
     </style>
 
     <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:layout_width">@dimen/progress_dp</item>
         <item name="android:layout_height">@dimen/progress_dp</item>
         <item name="android:gravity">center</item>
@@ -122,14 +123,12 @@
     </style>
 
     <style name="TabLayoutStyle" parent="Widget.Material3.TabLayout">
-        <!--<item name="android:background">?attr/colorPrimary</item>-->
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="tabTextColor">?attr/colorOnPrimary</item>
         <item name="tabIndicatorColor">?attr/colorOnPrimary</item>
         <item name="tabSelectedTextColor">?attr/colorOnPrimary</item>
-        <item name="tabGravity">fill</item>
         <item name="android:layout_marginHorizontal">@dimen/medium_margin</item>
         <item name="tabIndicatorFullWidth">true</item>
-        <item name="tabIndicatorHeight">@dimen/indicator_size</item>
         <item name="tabMode">fixed</item>
         <item name="tabTextAppearance">@style/TabLayoutTextAppearance</item>
     </style>
