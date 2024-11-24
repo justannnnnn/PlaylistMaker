@@ -138,6 +138,20 @@
         <item name="tabTextColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="BottomNavViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+        <item name="itemTextAppearanceActive">@style/BNVTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BNVTextAppearance</item>
+    </style>
+
+    <style name="BNVTextAppearance">
+        <item name="android:textSize">@dimen/very_small_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
 
     
 </resources>

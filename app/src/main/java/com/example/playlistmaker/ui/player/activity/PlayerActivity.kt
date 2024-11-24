@@ -95,4 +95,5 @@ class PlayerActivity : AppCompatActivity() {
             is PlayerState.Default -> binding.playButton.setImageDrawable(getDrawable(R.drawable.play))
         }
     }
+
 }

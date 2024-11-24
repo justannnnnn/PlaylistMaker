@@ -7,19 +7,15 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.settings.fragment.SettingsFragment">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/back"
-            android:contentDescription="backButton"
-            style="@style/ImageButtonStyle"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
