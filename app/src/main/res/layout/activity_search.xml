@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.search.activity.SearchActivity"
 
     android:orientation="vertical">
@@ -77,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/searchLayout"
+            android:visibility="gone"
             />
 
         <LinearLayout
@@ -86,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:visibility="gone">
+            tools:visibility="visible">
             
             <ImageView
                 android:id="@+id/placeholderIV"
