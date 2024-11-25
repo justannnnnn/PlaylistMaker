@@ -32,6 +32,7 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
     }
 
     fun searchDebounce(changedText: String){
+        if (changedText == "") handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         if (latestSearchText == changedText && searchStateLiveData.value !is TracksState.Error) return
 
         this.latestSearchText = changedText

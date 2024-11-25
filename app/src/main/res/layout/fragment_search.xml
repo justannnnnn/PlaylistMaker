@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
-    tools:context=".ui.search.activity.SearchActivity"
+    tools:context=".ui.search.fragment.SearchFragment"
 
     android:orientation="vertical">
 
@@ -17,13 +17,7 @@
         android:layout_marginEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageButton
-            android:id="@+id/backButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/back"
-            android:contentDescription="backButton"
-            style="@style/ImageButtonStyle"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +83,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:visibility="visible">
-            
+
             <ImageView
                 android:id="@+id/placeholderIV"
                 android:layout_width="wrap_content"
@@ -105,7 +99,7 @@
                 tools:text="@string/net_problems"
                 android:textAlignment="center"
                 style="@style/SmallMediumTextViewStyle"/>
-            
+
             <Button
                 android:id="@+id/refreshButton"
                 android:layout_marginTop="@dimen/big_margin"
@@ -130,29 +124,29 @@
             android:visibility="gone">
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="@string/you_searched"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@style/SmallMediumTextViewStyle"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/searchHistoryRV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/clearHistory"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clear_history"
-                android:layout_gravity="center"
-                style="@style/StandartButtonStyle"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="@string/you_searched"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    style="@style/SmallMediumTextViewStyle"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/searchHistoryRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/clearHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clear_history"
+                    android:layout_gravity="center"
+                    style="@style/StandartButtonStyle"/>
             </LinearLayout>
 
         </ScrollView>
