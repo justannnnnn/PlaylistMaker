@@ -27,6 +27,7 @@ class SearchFragment: Fragment() {
     private val handler: Handler = getKoin().get()
 
     private var textForSearch: String = ""
+    private var lastTextSearch: String = ""
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
     private val historyAdapter: TrackAdapter = TrackAdapter()
@@ -93,10 +94,13 @@ class SearchFragment: Fragment() {
                 if (!text.isNullOrEmpty()) {
                     binding.clearButton.visibility = View.VISIBLE
                     textForSearch = text.toString()
+                    lastTextSearch = textForSearch
                     viewModel.searchDebounce(textForSearch)
                 }
                 else {
                     binding.clearButton.visibility = View.INVISIBLE
+                    lastTextSearch = ""
+                    viewModel.searchDebounce("")
                 }
 
                 binding.searchHistoryLL.visibility = if (binding.searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
@@ -173,7 +177,7 @@ class SearchFragment: Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT, textForSearch)
+        outState.putString(SEARCH_TEXT, lastTextSearch)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
