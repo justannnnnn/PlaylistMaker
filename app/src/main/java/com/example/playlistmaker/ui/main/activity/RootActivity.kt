@@ -24,8 +24,14 @@ class RootActivity: AppCompatActivity() {
 
         navController.addOnDestinationChangedListener{_, destination, _ ->
             when (destination.id){
-                R.id.playerActivity -> binding.bottomNavigationView.visibility = View.GONE
-                else -> binding.bottomNavigationView.visibility = View.VISIBLE
+                R.id.playerActivity -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                    binding.border.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                    binding.border.visibility = View.VISIBLE
+                }
             }
         }
     }
