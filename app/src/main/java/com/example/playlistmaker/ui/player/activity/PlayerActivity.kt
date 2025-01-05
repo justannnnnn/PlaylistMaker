@@ -10,11 +10,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.model.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -52,26 +49,19 @@ class PlayerActivity : AppCompatActivity() {
         track.previewUrl?.let { viewModel.preparePlayer(it) }
 
         viewModel.observePlayerState().observe(this){
-            render(it)
+            binding.playButton.isEnabled = it.isPlayButtonEnabled
+            binding.playButton.setImageDrawable(getDrawable(it.buttonIcon))
+            binding.timerTextView.text = it.progress
         }
 
-        viewModel.observeTimerValue().observe(this){
-            if (it != 0){
-                binding.timerTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(it)
-            }
+        binding.playButton.setOnClickListener {
+            viewModel.onPlayButtonClicked()
         }
-
-        binding.playButton.setOnClickListener { viewModel.playbackControl() }
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.pausePlayer()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.releasePlayer()
+        viewModel.onPause()
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {
@@ -79,21 +69,6 @@ class PlayerActivity : AppCompatActivity() {
             TypedValue.COMPLEX_UNIT_DIP,
             dp,
             context.resources.displayMetrics).toInt()
-    }
-
-    private fun render(state: PlayerState){
-        when (state){
-            is PlayerState.Prepared -> {
-                binding.playButton.isEnabled = true
-                binding.playButton.setImageDrawable(getDrawable(R.drawable.play))
-                binding.timerTextView.text = getString(R.string.zero_time)
-            }
-            is PlayerState.Paused -> binding.playButton.setImageDrawable(getDrawable(R.drawable.play))
-            is PlayerState.Playing -> {
-                binding.playButton.setImageDrawable(getDrawable(R.drawable.pause))
-            }
-            is PlayerState.Default -> binding.playButton.setImageDrawable(getDrawable(R.drawable.play))
-        }
     }
 
 }

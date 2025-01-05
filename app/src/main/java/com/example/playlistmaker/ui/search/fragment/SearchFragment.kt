@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.search.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
@@ -20,20 +20,21 @@ import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackAdapter
 import com.example.playlistmaker.ui.search.model.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
-import org.koin.android.ext.android.getKoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment: Fragment() {
-    private val handler: Handler = getKoin().get()
 
     private var textForSearch: String = ""
     private var lastTextSearch: String = ""
     private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter()
+    private val adapter: TrackAdapter = TrackAdapter()
     private val historyAdapter: TrackAdapter = TrackAdapter()
     private var isClickAllowed = true
 
     private lateinit var binding: FragmentSearchBinding
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -61,13 +62,21 @@ class SearchFragment: Fragment() {
             }
         }
 
+        onTrackClickDebounce = {track ->
+            if (clickDebounce()){
+                viewModel.saveHistory(track)
+                val intent = Intent(requireContext(), PlayerActivity::class.java)
+                intent.putExtra("selected_track", track)
+                startActivity(intent)
+            }
+        }
 
         adapter.onClickedTrack = {track ->
-            handleTrackClick(track)
+            onTrackClickDebounce(track)
         }
 
         historyAdapter.onClickedTrack = {track ->
-            handleTrackClick(track)
+            onTrackClickDebounce(track)
         }
 
         // clearHistory button
@@ -202,18 +211,14 @@ class SearchFragment: Fragment() {
         }
     }
 
-    private fun handleTrackClick(track: Track){
-        viewModel.saveHistory(track)
-        val intent = Intent(requireContext(), PlayerActivity::class.java)
-        intent.putExtra("selected_track", track)
-        startActivity(intent)
-    }
-
     private fun clickDebounce() : Boolean{
         val current = isClickAllowed
         if (isClickAllowed){
             isClickAllowed = false
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
