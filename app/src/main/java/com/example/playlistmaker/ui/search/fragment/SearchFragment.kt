@@ -1,55 +1,60 @@
-package com.example.playlistmaker.ui.search.activity
+package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.search.TrackAdapter
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.search.TrackAdapter
 import com.example.playlistmaker.ui.search.model.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
+class SearchFragment: Fragment() {
     private val handler: Handler = getKoin().get()
 
     private var textForSearch: String = ""
+    private var lastTextSearch: String = ""
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
     private val historyAdapter: TrackAdapter = TrackAdapter()
     private var isClickAllowed = true
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
 
     private val viewModel by viewModel<SearchViewModel>()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        // Back button
-        binding.backButton.setOnClickListener {
-            finish()
-        }
 
-        viewModel.observeSearchState().observe(this){
+        viewModel.observeSearchState().observe(viewLifecycleOwner){
             render(it)
         }
-        viewModel.observeHistoryChanged().observe(this){
+        viewModel.observeHistoryChanged().observe(viewLifecycleOwner){
             if (it) {
                 historyAdapter.tracks = viewModel.getHistoryTracks()
                 historyAdapter.notifyDataSetChanged()
@@ -79,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
             adapter.notifyDataSetChanged()
             binding.placeholderLL.visibility = View.GONE
-            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         }
 
         binding.searchEditText.addTextChangedListener( // listener for text changing
@@ -89,10 +94,13 @@ class SearchActivity : AppCompatActivity() {
                 if (!text.isNullOrEmpty()) {
                     binding.clearButton.visibility = View.VISIBLE
                     textForSearch = text.toString()
+                    lastTextSearch = textForSearch
                     viewModel.searchDebounce(textForSearch)
                 }
                 else {
                     binding.clearButton.visibility = View.INVISIBLE
+                    lastTextSearch = ""
+                    viewModel.searchDebounce("")
                 }
 
                 binding.searchHistoryLL.visibility = if (binding.searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
@@ -156,25 +164,27 @@ class SearchActivity : AppCompatActivity() {
 
     private fun buildRV(){
         adapter.tracks = tracks
-        binding.searchRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.searchRecyclerView.adapter = adapter
 
 
         binding.searchHistoryRV.adapter = historyAdapter
         historyAdapter.tracks = viewModel.getHistoryTracks()
-        binding.searchHistoryRV.layoutManager = LinearLayoutManager(this)
+        binding.searchHistoryRV.layoutManager = LinearLayoutManager(requireContext())
         binding.searchHistoryLL.visibility = if (!binding.searchEditText.hasFocus() || historyAdapter.tracks.isEmpty())
             View.GONE else View.VISIBLE
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_TEXT, textForSearch)
+        outState.putString(SEARCH_TEXT, lastTextSearch)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        binding.searchEditText.setText(savedInstanceState.getString(SEARCH_TEXT))
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            binding.searchEditText.setText(savedInstanceState.getString(SEARCH_TEXT))
+        }
         binding.placeholderLL.visibility = View.GONE
     }
 
@@ -194,8 +204,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun handleTrackClick(track: Track){
         viewModel.saveHistory(track)
-
-        val intent = Intent(this, PlayerActivity::class.java)
+        val intent = Intent(requireContext(), PlayerActivity::class.java)
         intent.putExtra("selected_track", track)
         startActivity(intent)
     }
@@ -212,5 +221,6 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
 
 }
