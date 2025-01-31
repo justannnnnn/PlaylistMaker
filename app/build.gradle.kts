@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
 }
 
 android {
@@ -56,7 +57,10 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.9.0")
     implementation ("io.insert-koin:koin-android:3.3.0")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
-    implementation ("androidx.fragment:fragment-ktx:1.5.6")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.8.6")
+    implementation (libs.androidx.fragment.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
 }

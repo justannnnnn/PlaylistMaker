@@ -46,7 +46,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.genreTextView.text = track.primaryGenreName
         binding.countryTextView.text = track.country
 
-        track.previewUrl?.let { viewModel.preparePlayer(it) }
+        track.previewUrl?.let { viewModel.preparePlayer(it, track.trackId) }
 
         viewModel.observePlayerState().observe(this){
             binding.playButton.isEnabled = it.isPlayButtonEnabled
@@ -54,8 +54,19 @@ class PlayerActivity : AppCompatActivity() {
             binding.timerTextView.text = it.progress
         }
 
+        viewModel.observePlayerState().observe(this){
+            binding.likeButton.setImageDrawable(getDrawable(
+                if (it.isFavorite) R.drawable.like_active
+                else R.drawable.like_inactive
+            ))
+        }
+
         binding.playButton.setOnClickListener {
             viewModel.onPlayButtonClicked()
+        }
+
+        binding.likeButton.setOnClickListener {
+            viewModel.onFavoriteClicked(track)
         }
     }
 

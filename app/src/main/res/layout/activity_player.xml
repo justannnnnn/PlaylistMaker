@@ -90,7 +90,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="@dimen/icon_text"
         android:layout_marginTop="54dp"
-        android:background="@drawable/like"
+        android:background="@drawable/like_inactive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
 

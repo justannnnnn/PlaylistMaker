@@ -9,7 +9,9 @@ import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.settings.SettingsInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class App: Application() {
     override fun onCreate() {
@@ -17,6 +19,7 @@ class App: Application() {
         startKoin {
             androidContext(this@App)
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+            androidLogger(Level.DEBUG)
         }
 
         val settingsInteractor = getKoin().get<SettingsInteractor>()
