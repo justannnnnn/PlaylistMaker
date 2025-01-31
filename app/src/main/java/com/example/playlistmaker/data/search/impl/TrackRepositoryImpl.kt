@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.search.impl
 
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.dto.TrackSearchRequest
 import com.example.playlistmaker.data.search.dto.TrackSearchResponse
 import com.example.playlistmaker.data.network.NetworkClient
@@ -10,13 +11,17 @@ import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
+class TrackRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val appDatabase: AppDatabase
+) : TrackRepository {
     override fun searchTracks(expr: String): Flow<ArrayList<Track>?> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expr))
         when (response.resultCode){
             -1 -> emit(null)
             200 -> {
                 with (response as TrackSearchResponse) {
+                    val favoritesIds = appDatabase.trackDao().getTracksIds()
                     emit(ArrayList(response.results.mapNotNull {
                         try {
                             Track(
@@ -29,7 +34,8 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                                 it.releaseDate,
                                 it.primaryGenreName,
                                 it.country,
-                                it.previewUrl
+                                it.previewUrl,
+                                it.trackId in favoritesIds
                             )
                         } catch (e: Exception) {
                             null

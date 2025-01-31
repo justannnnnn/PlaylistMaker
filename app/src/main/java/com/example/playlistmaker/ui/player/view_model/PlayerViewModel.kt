@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,7 +14,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val mediaPlayer: MediaPlayer): ViewModel() {
+class PlayerViewModel(
+    private val mediaPlayer: MediaPlayer,
+    private val favoritesInteractor: FavoritesInteractor
+): ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default())
     private var timerJob: Job? = null
 
@@ -34,6 +39,16 @@ class PlayerViewModel(private val mediaPlayer: MediaPlayer): ViewModel() {
             else -> {}
         }
     }
+
+    fun onFavoriteClicked(track: Track){
+        when (playerStateLiveData.value?.isFavorite){
+            true -> favoritesInteractor.deleteTrackFromFavorites(track)
+            false -> favoritesInteractor.addTrackToFavorites(track)
+            null -> {}
+        }
+        playerStateLiveData.postValue(playerStateLiveData.value.co)
+    }
+
     fun preparePlayer(url: String){
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
