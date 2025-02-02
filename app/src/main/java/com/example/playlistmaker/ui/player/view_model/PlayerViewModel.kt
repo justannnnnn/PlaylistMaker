@@ -78,33 +78,33 @@ class PlayerViewModel(
         }
         mediaPlayer.setOnCompletionListener {
             timerJob?.cancel()
-            playerStateLiveData.postValue(PlayerState.Prepared(isFavorite))
+            playerStateLiveData.postValue(PlayerState.Prepared(playerStateLiveData.value?.isFavorite ?: false))
         }
     }
 
     private fun startPlayer(){
         mediaPlayer.start()
-        playerStateLiveData.postValue(PlayerState.Playing(getCurrentPlayerPosition(), playerStateLiveData.value!!.isFavorite))
+        playerStateLiveData.postValue(PlayerState.Playing(getCurrentPlayerPosition(), playerStateLiveData.value?.isFavorite ?: false))
         startTimer()
     }
 
     private fun pausePlayer(){
         mediaPlayer.pause()
         timerJob?.cancel()
-        playerStateLiveData.postValue(PlayerState.Paused(getCurrentPlayerPosition(), playerStateLiveData.value!!.isFavorite))
+        playerStateLiveData.postValue(PlayerState.Paused(getCurrentPlayerPosition(), playerStateLiveData.value?.isFavorite ?: false))
     }
 
     private fun releasePlayer(){
         mediaPlayer.stop()
         mediaPlayer.release()
-        playerStateLiveData.value = PlayerState.Default(playerStateLiveData.value!!.isFavorite)
+        playerStateLiveData.value = PlayerState.Default(playerStateLiveData.value?.isFavorite ?: false)
     }
 
     private fun startTimer(){
         timerJob = viewModelScope.launch{
             while (mediaPlayer.isPlaying){
                 delay(300L)
-                playerStateLiveData.postValue(PlayerState.Playing(getCurrentPlayerPosition(), playerStateLiveData.value!!.isFavorite))
+                playerStateLiveData.postValue(PlayerState.Playing(getCurrentPlayerPosition(), playerStateLiveData.value?.isFavorite ?: false))
             }
         }
     }
