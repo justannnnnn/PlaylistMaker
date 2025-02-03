@@ -15,21 +15,21 @@ import com.example.playlistmaker.domain.sharing.impl.SharingInteractorImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
-val interactorModule = module{
+val interactorModule = module {
 
-    single<SearchHistoryInteractor>{
+    single<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
 
-    single<TrackInteractor>{
+    single<TrackInteractor> {
         TrackInteractorImpl(get())
     }
 
-    single<SettingsInteractor>{
+    single<SettingsInteractor> {
         SettingsInteractorImpl(get())
     }
 
-    single<SharingInteractor>{
+    single<SharingInteractor> {
         SharingInteractorImpl(get(), androidApplication())
     }
 
@@ -37,7 +37,7 @@ val interactorModule = module{
         FavoritesInteractorImpl(get())
     }
 
-    single<PlaylistsInteractor>{
+    single<PlaylistsInteractor> {
         PlaylistsInteractorImpl(get())
     }
 }

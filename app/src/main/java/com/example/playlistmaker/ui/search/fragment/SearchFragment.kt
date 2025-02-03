@@ -23,7 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment: Fragment() {
+class SearchFragment : Fragment() {
 
     private var textForSearch: String = ""
     private var lastTextSearch: String = ""
@@ -51,31 +51,31 @@ class SearchFragment: Fragment() {
         super.onCreate(savedInstanceState)
 
 
-        viewModel.observeSearchState().observe(viewLifecycleOwner){
+        viewModel.observeSearchState().observe(viewLifecycleOwner) {
             render(it)
         }
-        viewModel.observeHistoryChanged().observe(viewLifecycleOwner){
+        viewModel.observeHistoryChanged().observe(viewLifecycleOwner) {
             if (it) {
                 historyAdapter.tracks = viewModel.getHistoryTracks()
                 historyAdapter.notifyDataSetChanged()
             }
         }
 
-        onTrackClickDebounce = {track ->
-            if (clickDebounce()){
+        onTrackClickDebounce = { track ->
+            if (clickDebounce()) {
                 viewModel.saveHistory(track)
                 val bundle = Bundle().apply {
-                    putSerializable("selected_track", track) // Передаём трек в аргументы
+                    putSerializable("selected_track", track)
                 }
                 findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
             }
         }
 
-        adapter.onClickedTrack = {track ->
+        adapter.onClickedTrack = { track ->
             onTrackClickDebounce(track)
         }
 
-        historyAdapter.onClickedTrack = {track ->
+        historyAdapter.onClickedTrack = { track ->
             onTrackClickDebounce(track)
         }
 
@@ -93,7 +93,10 @@ class SearchFragment: Fragment() {
             tracks.clear()
             adapter.notifyDataSetChanged()
             binding.placeholderLL.visibility = View.GONE
-            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+            (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                binding.searchEditText.windowToken,
+                0
+            )
         }
 
         binding.searchEditText.addTextChangedListener( // listener for text changing
@@ -105,19 +108,20 @@ class SearchFragment: Fragment() {
                     textForSearch = text.toString()
                     lastTextSearch = textForSearch
                     viewModel.searchDebounce(textForSearch)
-                }
-                else {
+                } else {
                     binding.clearButton.visibility = View.INVISIBLE
                     lastTextSearch = ""
                     viewModel.searchDebounce("")
                 }
 
-                binding.searchHistoryLL.visibility = if (binding.searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
+                binding.searchHistoryLL.visibility =
+                    if (binding.searchEditText.hasFocus() && text?.isEmpty() == true && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
             }
         )
 
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus -> // listener for focus changing(just for searchHistory)
-            binding.searchHistoryLL.visibility = if (hasFocus && binding.searchEditText.text.isEmpty() && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.searchHistoryLL.visibility =
+                if (hasFocus && binding.searchEditText.text.isEmpty() && historyAdapter.tracks.isNotEmpty()) View.VISIBLE else View.GONE
         }
 
 
@@ -132,9 +136,9 @@ class SearchFragment: Fragment() {
         buildRV()
     }
 
-    private fun render(state: TracksState){
+    private fun render(state: TracksState) {
         if (state !is TracksState.Loading && state !is TracksState.Error) textForSearch = ""
-        when (state){
+        when (state) {
             is TracksState.Content -> showContent(state.tracks)
             is TracksState.Empty -> showEmpty()
             is TracksState.Error -> showError()
@@ -142,25 +146,25 @@ class SearchFragment: Fragment() {
         }
     }
 
-    private fun showLoading(){
+    private fun showLoading() {
         binding.placeholderLL.visibility = View.GONE
         binding.searchRecyclerView.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun showError(){
+    private fun showError() {
         binding.searchRecyclerView.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         showPlaceholder(R.string.net_problems, R.drawable.no_internet)
     }
 
-    private fun showEmpty(){
+    private fun showEmpty() {
         binding.searchRecyclerView.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         showPlaceholder(R.string.nothing_found, R.drawable.nothing_found)
     }
 
-    private fun showContent(tracks: ArrayList<Track>){
+    private fun showContent(tracks: ArrayList<Track>) {
         binding.progressBar.visibility = View.GONE
         binding.placeholderLL.visibility = View.GONE
         binding.searchRecyclerView.visibility = View.VISIBLE
@@ -171,7 +175,7 @@ class SearchFragment: Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun buildRV(){
+    private fun buildRV() {
         adapter.tracks = tracks
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.searchRecyclerView.adapter = adapter
@@ -180,8 +184,9 @@ class SearchFragment: Fragment() {
         binding.searchHistoryRV.adapter = historyAdapter
         historyAdapter.tracks = viewModel.getHistoryTracks()
         binding.searchHistoryRV.layoutManager = LinearLayoutManager(requireContext())
-        binding.searchHistoryLL.visibility = if (!binding.searchEditText.hasFocus() || historyAdapter.tracks.isEmpty())
-            View.GONE else View.VISIBLE
+        binding.searchHistoryLL.visibility =
+            if (!binding.searchEditText.hasFocus() || historyAdapter.tracks.isEmpty())
+                View.GONE else View.VISIBLE
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -198,22 +203,21 @@ class SearchFragment: Fragment() {
     }
 
 
-    private fun showPlaceholder(@StringRes message: Int?, @DrawableRes icon: Int?){
-        if (message != null && icon != null){
+    private fun showPlaceholder(@StringRes message: Int?, @DrawableRes icon: Int?) {
+        if (message != null && icon != null) {
             if (message == R.string.net_problems) binding.refreshButton.visibility = View.VISIBLE
             else binding.refreshButton.visibility = View.GONE
             binding.placeholderLL.visibility = View.VISIBLE
             binding.placeholderIV.setImageResource(icon)
             binding.placeholderTextView.setText(message)
-        }
-        else{
+        } else {
             binding.placeholderLL.visibility = View.GONE
         }
     }
 
-    private fun clickDebounce() : Boolean{
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
-        if (isClickAllowed){
+        if (isClickAllowed) {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
@@ -222,7 +226,8 @@ class SearchFragment: Fragment() {
         }
         return current
     }
-    companion object{
+
+    companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

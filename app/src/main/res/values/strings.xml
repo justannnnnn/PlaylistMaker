@@ -56,5 +56,29 @@
         <item quantity="other">%1$d треков</item>
     </plurals>
 
+    <string name="no_tracks_in_playlist">В плейлисте нет ни одного трека</string>
 
+    <plurals name="minutes_plurals">
+        <item quantity="zero">%1$d минут</item>
+        <item quantity="one">%1$d минута</item>
+        <item quantity="two">%1$d минуты</item>
+        <item quantity="few">%1$d минуты</item>
+        <item quantity="many">%1$d минут</item>
+        <item quantity="other">%1$d минут</item>
+    </plurals>
+
+    <string name="delete_track">Удалить трек</string>
+    <string name="you_sure_to_delete_track">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="delete">Удалить</string>
+    <string name="no_tracks_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
+
+    <string name="share">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="want_to_delete_playlist">Хотите удалить плейлист?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
 </resources>

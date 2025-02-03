@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -30,12 +31,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewPlaylistBinding
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    protected open lateinit var binding: FragmentNewPlaylistBinding
+    protected open var coverPath = ""
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
-    private val viewModel: NewPlaylistViewModel by viewModel<NewPlaylistViewModel>()
+    protected open val viewModel: NewPlaylistViewModel by viewModel<NewPlaylistViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,13 +55,14 @@ class NewPlaylistFragment : Fragment() {
             handleBackPress()
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                handleBackPress()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    handleBackPress()
+                }
+            })
 
-        var coverPath = ""
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
@@ -80,7 +83,11 @@ class NewPlaylistFragment : Fragment() {
                 }
             }
         binding.photoPickupLL.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickMedia.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
         }
 
         binding.nameInput.addTextChangedListener(object : TextWatcher {
@@ -116,17 +123,19 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
-    private fun handleBackPress(){
-        if (binding.photoPickupLL.background == requireContext().getDrawable(R.drawable.add_photo_bg) ||
+    private fun handleBackPress() {
+        if (binding.photoPickupLL.background == AppCompatResources.getDrawable(
+                requireContext(), R.drawable.add_photo_bg
+            ) ||
             binding.nameInput.text.isNullOrEmpty().not() ||
             binding.descInput.text.isNullOrEmpty().not()
         ) {
             confirmDialog = MaterialAlertDialogBuilder(requireContext())
                 .setTitle(requireContext().getString(R.string.finish_creation))
                 .setMessage(requireContext().getString(R.string.finish_creation_desc))
-                .setNeutralButton(requireContext().getString(R.string.cancel)) { dialog, which ->
+                .setNeutralButton(requireContext().getString(R.string.cancel)) { _, _ ->
                 }
-                .setNegativeButton(requireContext().getString(R.string.finish)) { dialog, which ->
+                .setNegativeButton(requireContext().getString(R.string.finish)) { dialog, _ ->
                     findNavController().navigateUp()
                     dialog.dismiss()
                 }
@@ -137,8 +146,10 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun saveImageToPrivateStorage(uri: Uri): String? {
-        val filePath =
-            File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
+        val filePath = File(
+            requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+            "myalbum"
+        )
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
@@ -152,9 +163,4 @@ class NewPlaylistFragment : Fragment() {
         outputStream.close()
         return file.absolutePath
     }
-
-    companion object {
-        fun newInstance() = NewPlaylistFragment()
-    }
-
 }

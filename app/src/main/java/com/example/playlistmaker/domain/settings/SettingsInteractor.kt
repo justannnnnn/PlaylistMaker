@@ -7,7 +7,7 @@ interface SettingsInteractor {
 
     fun applyTheme(consumer: ThemeConsumer)
 
-    interface ThemeConsumer{
+    interface ThemeConsumer {
         fun consume(isDark: Boolean)
     }
 }

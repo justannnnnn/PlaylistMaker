@@ -1,9 +1,9 @@
 package com.example.playlistmaker.domain.settings.impl
 
-import com.example.playlistmaker.domain.settings.SettingsInteractor
 import com.example.playlistmaker.data.settings.SettingsRepository
+import com.example.playlistmaker.domain.settings.SettingsInteractor
 
-class SettingsInteractorImpl(private val repository: SettingsRepository): SettingsInteractor {
+class SettingsInteractorImpl(private val repository: SettingsRepository) : SettingsInteractor {
     override fun isDarkTheme(): Boolean {
         return repository.isDarkTheme()
     }
@@ -15,5 +15,4 @@ class SettingsInteractorImpl(private val repository: SettingsRepository): Settin
     override fun applyTheme(consumer: SettingsInteractor.ThemeConsumer) {
         consumer.consume(repository.isDarkTheme())
     }
-
 }

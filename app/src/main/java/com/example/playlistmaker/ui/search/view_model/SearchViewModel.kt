@@ -13,11 +13,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val trackInteractor: TrackInteractor, private val historyInteractor: SearchHistoryInteractor, application: Application): AndroidViewModel(application) {
+class SearchViewModel(
+    private val trackInteractor: TrackInteractor,
+    private val historyInteractor: SearchHistoryInteractor,
+    application: Application
+) : AndroidViewModel(application) {
 
-    companion object{
+    companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 
     private var latestSearchText: String? = null
@@ -31,9 +34,11 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
     fun observeHistoryChanged(): LiveData<Boolean> = historyChangedLiveData
 
 
-    fun searchDebounce(changedText: String){
+    fun searchDebounce(changedText: String) {
         if (changedText == "") searchJob?.cancel()
-        if (latestSearchText == changedText && searchStateLiveData.value !is TracksState.Error) return
+        if (latestSearchText == changedText &&
+            searchStateLiveData.value !is TracksState.Error
+        ) return
 
         this.latestSearchText = changedText
         searchJob?.cancel()
@@ -44,14 +49,14 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
     }
 
 
-    private fun search(newSearchText: String){
-        if (newSearchText.isNotEmpty()){
+    private fun search(newSearchText: String) {
+        if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
 
 
             viewModelScope.launch {
                 trackInteractor.searchTracks(newSearchText)
-                    .collect{ pair ->
+                    .collect { pair ->
                         val tracks = pair.first
                         if (tracks == null) renderState(TracksState.Error(pair.second!!))
                         else {
@@ -63,25 +68,25 @@ class SearchViewModel(private val trackInteractor: TrackInteractor, private val 
         }
     }
 
-    private fun renderState(state: TracksState){
+    private fun renderState(state: TracksState) {
         searchStateLiveData.postValue(state)
     }
 
-    fun clearHistory(){
+    fun clearHistory() {
         historyInteractor.clearSearchHistory()
         historyChangedLiveData.postValue(false)
         historyChangedLiveData.postValue(true)
     }
 
-    fun saveHistory(track: Track){
+    fun saveHistory(track: Track) {
         historyInteractor.saveHistory(track)
         historyChangedLiveData.postValue(false)
         historyChangedLiveData.postValue(true)
     }
 
-    fun getHistoryTracks(): ArrayList<Track>{
+    fun getHistoryTracks(): ArrayList<Track> {
         val history = ArrayList<Track>()
-        historyInteractor.getHistory(object : SearchHistoryInteractor.SearchHistoryConsumer{
+        historyInteractor.getHistory(object : SearchHistoryInteractor.SearchHistoryConsumer {
             override fun consume(historyTracks: ArrayList<Track>) {
                 history.addAll(historyTracks)
             }

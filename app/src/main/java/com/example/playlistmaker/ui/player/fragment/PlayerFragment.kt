@@ -48,85 +48,85 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            binding.backButton.setOnClickListener {
-                parentFragmentManager.popBackStack()
-            }
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
-            val track = arguments?.getSerializable("selected_track") as? Track ?: return
-            Glide.with(this)
-                .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
-                .placeholder(R.drawable.empty_cover)
-                .transform(RoundedCorners(dpToPx(8f)))
-                .into(binding.coverImageView)
+        val track = arguments?.getSerializable("selected_track") as? Track ?: return
+        Glide.with(this)
+            .load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .placeholder(R.drawable.empty_cover)
+            .transform(RoundedCorners(dpToPx()))
+            .into(binding.coverImageView)
 
-            binding.trackNameTextView.text = track.trackName
-            binding.authorTextView.text = track.artistName
-            binding.durationTextView.text = track.trackTime
-            binding.albumGroup.visibility =
-                if (track.collectionName == null) View.GONE else View.VISIBLE
-            binding.albumTextView.text = track.collectionName ?: ""
-            binding.yearTextView.text = track.releaseDate?.subSequence(0, 4) ?: ""
-            binding.genreTextView.text = track.primaryGenreName
-            binding.countryTextView.text = track.country
+        binding.trackNameTextView.text = track.trackName
+        binding.authorTextView.text = track.artistName
+        binding.durationTextView.text = track.trackTime
+        binding.albumGroup.visibility =
+            if (track.collectionName == null) View.GONE else View.VISIBLE
+        binding.albumTextView.text = track.collectionName ?: ""
+        binding.yearTextView.text = track.releaseDate?.subSequence(0, 4) ?: ""
+        binding.genreTextView.text = track.primaryGenreName
+        binding.countryTextView.text = track.country
 
-            track.previewUrl?.let { viewModel.preparePlayer(it, track.trackId) }
+        track.previewUrl?.let { viewModel.preparePlayer(it, track.trackId) }
 
-            viewModel.observePlayerState().observe(viewLifecycleOwner) {
-                binding.playButton.isEnabled = it.isPlayButtonEnabled
-                binding.playButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        it.buttonIcon
-                    )
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+            binding.playButton.isEnabled = it.isPlayButtonEnabled
+            binding.playButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    it.buttonIcon
                 )
-                binding.timerTextView.text = it.progress
-            }
+            )
+            binding.timerTextView.text = it.progress
+        }
 
-            viewModel.observePlayerState().observe(viewLifecycleOwner) {
-                binding.likeButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        if (it.isFavorite) R.drawable.like_active else R.drawable.like_inactive
-                    )
+        viewModel.observePlayerState().observe(viewLifecycleOwner) {
+            binding.likeButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    if (it.isFavorite) R.drawable.like_active else R.drawable.like_inactive
                 )
+            )
+        }
+
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                binding.overlay.visibility =
+                    if (newState == BottomSheetBehavior.STATE_HIDDEN) View.GONE else View.VISIBLE
             }
 
-            bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
-                state = BottomSheetBehavior.STATE_HIDDEN
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        binding.addButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            viewModel.onAddButtonClicked()
+            viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
+                adapter.playlists.clear()
+                adapter.playlists.addAll(it)
+                adapter.notifyDataSetChanged()
             }
+        }
+        setupBottomSheet()
 
-            bottomSheetBehavior.addBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    binding.overlay.visibility =
-                        if (newState == BottomSheetBehavior.STATE_HIDDEN) View.GONE else View.VISIBLE
-                }
+        adapter.onClickedPlaylist = { playlist ->
+            onPlaylistClickDebounce(playlist, track)
+        }
 
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-            })
+        binding.playButton.setOnClickListener {
+            viewModel.onPlayButtonClicked()
+        }
 
-            binding.addButton.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                viewModel.onAddButtonClicked()
-                viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
-                    adapter.playlists.clear()
-                    adapter.playlists.addAll(it)
-                    adapter.notifyDataSetChanged()
-                }
-            }
-            setupBottomSheet()
-
-            adapter.onClickedPlaylist = { playlist ->
-                onPlaylistClickDebounce(playlist, track)
-            }
-
-            binding.playButton.setOnClickListener {
-                viewModel.onPlayButtonClicked()
-            }
-
-            binding.likeButton.setOnClickListener {
-                viewModel.onFavoriteClicked(track)
-            }
+        binding.likeButton.setOnClickListener {
+            viewModel.onFavoriteClicked(track)
+        }
     }
 
     private fun setupBottomSheet() {
@@ -165,10 +165,10 @@ class PlayerFragment : Fragment() {
         viewModel.onPause()
     }
 
-    private fun dpToPx(dp: Float): Int {
+    private fun dpToPx(): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            dp,
+            8f,
             resources.displayMetrics
         ).toInt()
     }
