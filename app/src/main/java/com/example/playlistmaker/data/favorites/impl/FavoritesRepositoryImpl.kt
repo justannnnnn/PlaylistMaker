@@ -7,7 +7,6 @@ import com.example.playlistmaker.data.favorites.FavoritesRepository
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 
 class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,

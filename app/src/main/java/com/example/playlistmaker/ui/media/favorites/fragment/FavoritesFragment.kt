@@ -1,18 +1,18 @@
 package com.example.playlistmaker.ui.media.favorites.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.media.favorites.model.FavoritesState
 import com.example.playlistmaker.ui.media.favorites.view_model.FavoritesViewModel
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackAdapter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -47,9 +47,10 @@ class FavoritesFragment: Fragment() {
 
         onTrackClickDebounce = {track ->
             if (clickDebounce()){
-                val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra("selected_track", track)
-                startActivity(intent)
+                val bundle = Bundle().apply {
+                    putSerializable("selected_track", track)
+                }
+                findNavController().navigate(R.id.action_mediaFragment_to_playerFragment, bundle)
             }
         }
         adapter.onClickedTrack = {track ->

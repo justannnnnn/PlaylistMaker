@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/blue" android:state_focused="true"/>  <!-- Голубой при фокусе -->
+    <item android:color="?attr/colorSurface"/>
+</selector>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/medium_margin"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/coverImageView"
+        android:scaleType="centerCrop"
+        android:layout_width="160dp"
+        android:layout_height="160dp"/>
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SmallestTextViewStyle"
+        android:textColor="?attr/colorOnPrimary"
+        tools:text = "Best songs"/>
+
+    <TextView
+        android:id="@+id/countTracksTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/SmallestTextViewStyle"
+        android:textColor="?attr/colorOnPrimary"
+        tools:text = "98 треков"/>
+</LinearLayout>

@@ -5,24 +5,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.favorites.playlists.PlaylistsInteractor
+import com.example.playlistmaker.domain.favorites.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.player.model.PlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     private val mediaPlayer: MediaPlayer,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesInteractor: FavoritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ): ViewModel() {
     private val playerStateLiveData = MutableLiveData<PlayerState>(PlayerState.Default())
+    private val playlistsLiveData = MutableLiveData<List<Playlist>>(emptyList())
+    private val wasTrackAddedToPlaylist = MutableLiveData<Boolean?>(null)
+
     private var timerJob: Job? = null
 
     fun observePlayerState(): LiveData<PlayerState> = playerStateLiveData
+    fun observePlaylistsState(): LiveData<List<Playlist>> = playlistsLiveData
+    fun observeAddingInPlaylistState(): LiveData<Boolean?> = wasTrackAddedToPlaylist
 
     override fun onCleared() {
         super.onCleared()
@@ -31,6 +39,35 @@ class PlayerViewModel(
 
     fun onPause(){
         pausePlayer()
+    }
+
+    fun onAddButtonClicked(){
+        viewModelScope.launch {
+            playlistsInteractor.getPlaylists()
+                .collect{
+                    playlistsLiveData.postValue(it)
+                }
+        }
+    }
+
+    fun onPlaylistClicked(playlist: Playlist, track: Track) {
+        viewModelScope.launch {
+            playlistsInteractor.isTrackInPlaylist(track.trackId, playlist)
+                .take(1)
+                .collect{
+                    if (it)
+                        wasTrackAddedToPlaylist.postValue(false)
+                    else{
+                        playlistsInteractor.addTrackInPlaylist(track, playlist)
+                        wasTrackAddedToPlaylist.postValue(true)
+                    }
+                }
+            playlistsInteractor.getPlaylists()
+                .collect{
+                    playlistsLiveData.postValue(it)
+                }
+            wasTrackAddedToPlaylist.postValue(null)
+        }
     }
 
     fun onPlayButtonClicked(){
@@ -71,15 +108,21 @@ class PlayerViewModel(
                 isFavorite = trackId in it
             }
         }
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerStateLiveData.postValue(PlayerState.Prepared(isFavorite))
-        }
-        mediaPlayer.setOnCompletionListener {
-            timerJob?.cancel()
-            playerStateLiveData.postValue(PlayerState.Prepared(playerStateLiveData.value?.isFavorite ?: false))
-        }
+        try {
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                playerStateLiveData.postValue(PlayerState.Prepared(isFavorite))
+            }
+            mediaPlayer.setOnCompletionListener {
+                timerJob?.cancel()
+                playerStateLiveData.postValue(
+                    PlayerState.Prepared(
+                        playerStateLiveData.value?.isFavorite ?: false
+                    )
+                )
+            }
+        } catch (e: IllegalStateException) {}
     }
 
     private fun startPlayer(){

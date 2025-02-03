@@ -4,6 +4,8 @@ import android.content.Context
 import com.example.playlistmaker.data.converters.TrackDbConvertor
 import com.example.playlistmaker.data.favorites.FavoritesRepository
 import com.example.playlistmaker.data.favorites.impl.FavoritesRepositoryImpl
+import com.example.playlistmaker.data.favorites.playlists.PlaylistsRepository
+import com.example.playlistmaker.data.favorites.playlists.impl.PlaylistsRepositoryImpl
 import com.example.playlistmaker.data.search.SearchHistoryRepository
 import com.example.playlistmaker.data.search.TrackRepository
 import com.example.playlistmaker.data.search.impl.SearchHistoryRepositoryImpl
@@ -35,6 +37,10 @@ val repositoryModule = module{
 
     single<FavoritesRepository>{
         FavoritesRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistsRepository>{
+        PlaylistsRepositoryImpl(get(), get())
     }
 
 }
