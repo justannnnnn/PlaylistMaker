@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -49,24 +50,14 @@ class NewPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.backButton.setOnClickListener {
-            if (binding.photoPickupLL.background == requireContext().getDrawable(R.drawable.add_photo_bg) ||
-                binding.nameInput.text.isNullOrEmpty().not() ||
-                binding.descInput.text.isNullOrEmpty().not()
-            ) {
-                confirmDialog = MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(requireContext().getString(R.string.finish_creation))
-                    .setMessage(requireContext().getString(R.string.finish_creation_desc))
-                    .setNeutralButton(requireContext().getString(R.string.cancel)) { dialog, which ->
-                    }
-                    .setNegativeButton(requireContext().getString(R.string.finish)) { dialog, which ->
-                        findNavController().navigateUp()
-                        dialog.dismiss()
-                    }
-                confirmDialog.show()
-            } else {
-                findNavController().navigateUp()
-            }
+            handleBackPress()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                handleBackPress()
+            }
+        })
 
         var coverPath = ""
         val pickMedia =
@@ -122,6 +113,26 @@ class NewPlaylistFragment : Fragment() {
                 getString(R.string.playlist_created, binding.nameInput.text.toString()),
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    private fun handleBackPress(){
+        if (binding.photoPickupLL.background == requireContext().getDrawable(R.drawable.add_photo_bg) ||
+            binding.nameInput.text.isNullOrEmpty().not() ||
+            binding.descInput.text.isNullOrEmpty().not()
+        ) {
+            confirmDialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(requireContext().getString(R.string.finish_creation))
+                .setMessage(requireContext().getString(R.string.finish_creation_desc))
+                .setNeutralButton(requireContext().getString(R.string.cancel)) { dialog, which ->
+                }
+                .setNegativeButton(requireContext().getString(R.string.finish)) { dialog, which ->
+                    findNavController().navigateUp()
+                    dialog.dismiss()
+                }
+            confirmDialog.show()
+        } else {
+            findNavController().navigateUp()
         }
     }
 
