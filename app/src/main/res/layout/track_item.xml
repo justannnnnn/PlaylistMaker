@@ -14,59 +14,69 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/trackNameTextView"
-        style="@style/SmallTextViewStyle"
-        android:layout_height="wrap_content"
+    <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_constraintWidth_percent="0.78"
-        android:layout_margin="@dimen/icon_text"
-        android:ellipsize="end"
-        android:maxLines="1"
-        tools:text="Yesterday(remastered)ldfvldkfmvldfvkdlkfddfvd"
         app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/imageView2"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toEndOf="@+id/coverImageView"
-        app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-        android:layout_marginLeft="@dimen/icon_text">
+        app:layout_constraintRight_toLeftOf="@id/imageView2"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/authorTextView"
-            style="@style/SmallestTextViewStyle"
-            android:layout_width="wrap_content"
+            android:id="@+id/trackNameTextView"
+            style="@style/SmallTextViewStyle"
             android:layout_height="wrap_content"
-            tools:text="The Beatles(szkdjcnscs)"
-            android:maxWidth="120dp"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:src="@drawable/ic_dot"
-            app:layout_constraintStart_toEndOf="@+id/authorTextView"
-            app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-            app:tint="?attr/colorSurface" />
-
-        <TextView
-            android:id="@+id/durantionTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
-            tools:text="2:25"
-            android:maxLines="1"
+            android:layout_width = "match_parent"
+            android:layout_marginStart="@dimen/icon_text"
+            android:layout_marginEnd="@dimen/icon_text"
             android:ellipsize="end"
-            style="@style/SmallestTextViewStyle"/>
+            android:maxLines="1"
+            tools:text="Yesterday(remastered)ldfvldkfmvldfvkdlkfddfvd"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/icon_text">
+
+            <TextView
+                android:id="@+id/authorTextView"
+                style="@style/SmallestTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="The Beatles(szkdjcnscs)"
+                android:maxWidth="120dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:src="@drawable/ic_dot"
+                app:layout_constraintStart_toEndOf="@+id/authorTextView"
+                app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
+                app:tint="?attr/colorSurface" />
+
+            <TextView
+                android:id="@+id/durantionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/trackNameTextView"
+                tools:text="2:25"
+                android:maxLines="1"
+                android:ellipsize="end"
+                style="@style/SmallestTextViewStyle"/>
+        </LinearLayout>
+
     </LinearLayout>
+
+
 
     <ImageView
         android:id="@+id/imageView2"

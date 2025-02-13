@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
+    //kotlin("kapt") version "1.9.22"
 }
 
 android {
@@ -27,11 +29,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures{
         viewBinding = true
@@ -39,10 +41,12 @@ android {
 }
 
 dependencies {
+
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.github.bumptech.glide:glide:4.14.2")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+    kapt("com.github.bumptech.glide:compiler:4.14.2")
     implementation("com.google.code.gson:gson:2.10")
+    implementation("io.coil-kt:coil:2.4.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidx.core.ktx)
@@ -56,7 +60,10 @@ dependencies {
     implementation ("androidx.core:core-ktx:1.9.0")
     implementation ("io.insert-koin:koin-android:3.3.0")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation ("androidx.navigation:navigation-ui-ktx:2.5.3")
-    implementation ("androidx.fragment:fragment-ktx:1.5.6")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.8.6")
+    implementation (libs.androidx.fragment.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 }

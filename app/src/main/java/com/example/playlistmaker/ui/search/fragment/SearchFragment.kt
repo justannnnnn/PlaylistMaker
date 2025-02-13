@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,11 @@ import androidx.annotation.StringRes
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackAdapter
 import com.example.playlistmaker.ui.search.model.TracksState
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
@@ -65,9 +64,10 @@ class SearchFragment: Fragment() {
         onTrackClickDebounce = {track ->
             if (clickDebounce()){
                 viewModel.saveHistory(track)
-                val intent = Intent(requireContext(), PlayerActivity::class.java)
-                intent.putExtra("selected_track", track)
-                startActivity(intent)
+                val bundle = Bundle().apply {
+                    putSerializable("selected_track", track) // Передаём трек в аргументы
+                }
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment, bundle)
             }
         }
 

@@ -54,6 +54,7 @@
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textColor">?attr/colorSurface</item>
+
     </style>
     
     <style name="SettingsButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -150,6 +151,14 @@
         <item name="android:textSize">@dimen/very_small_text_size</item>
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/textinput_stroke_color</item>
+        <item name="hintTextColor">@color/textinput_hint_color</item>
+        <item name="android:textColorHint">?attr/colorOnPrimary</item>
+        <item name="boxBackgroundColor">?attr/colorPrimary</item>
+        <item name="hintTextAppearance">@style/SmallTextViewStyle</item>
     </style>
 
 

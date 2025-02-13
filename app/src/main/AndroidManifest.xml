@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.PlaylistMakerMain"
         tools:targetApi="31">
-        <activity android:name=".ui.player.activity.PlayerActivity"/>
         <activity
             android:name=".ui.main.activity.RootActivity"
             android:exported="true"
