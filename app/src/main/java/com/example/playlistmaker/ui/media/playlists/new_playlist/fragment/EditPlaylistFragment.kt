@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.media.playlists.new_playlist.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import coil.Coil
@@ -49,6 +50,15 @@ class EditPlaylistFragment : NewPlaylistFragment() {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigateUp()
+                }
+            }
+        )
 
         binding.createPlaylistButton.setOnClickListener {
             val newPlaylist = Playlist(

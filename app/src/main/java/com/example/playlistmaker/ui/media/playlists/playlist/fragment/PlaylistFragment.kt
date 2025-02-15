@@ -89,7 +89,7 @@ class PlaylistFragment : Fragment() {
         binding.moreButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-        setupBottomSheet(playlist)
+        setupBottomSheet()
 
         onTrackClickDebounce = { track ->
             val bundle = Bundle().apply {
@@ -100,10 +100,10 @@ class PlaylistFragment : Fragment() {
         onLongTrackClick = { track ->
             removeTrackDialog = MaterialAlertDialogBuilder(requireContext())
                 .setTitle(requireContext().getString(R.string.delete_track))
-                .setMessage(requireContext().getString(R.string.you_sure_to_delete_track))
-                .setNeutralButton(requireContext().getString(R.string.cancel)) { _, _ ->
+                .setMessage(requireContext().getString(R.string.you_want_to_delete_track))
+                .setNeutralButton(requireContext().getString(R.string.no)) { _, _ ->
                 }
-                .setNegativeButton(requireContext().getString(R.string.delete)) { _, _ ->
+                .setNegativeButton(requireContext().getString(R.string.yes)) { _, _ ->
                     viewModel.deleteTrackFromPlaylist(track, playlist)
                 }
 
@@ -123,6 +123,7 @@ class PlaylistFragment : Fragment() {
         super.onResume()
         viewModel.updatePlaylist(playlist.playlistId)
         viewModel.observePlaylistState().observe(viewLifecycleOwner) {
+            it?.let { playlist = it }
             renderPlaylist(it)
         }
     }
@@ -185,7 +186,7 @@ class PlaylistFragment : Fragment() {
         binding.tracksRV.adapter = adapter
     }
 
-    private fun setupBottomSheet(playlist: Playlist) {
+    private fun setupBottomSheet() {
         binding.playlistInfoInc.playlistNameTextView.text = playlist.playlistName
         binding.playlistInfoInc.countTracksTextView.text = requireContext().resources
             .getQuantityString(
