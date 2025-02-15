@@ -10,7 +10,7 @@ interface SearchHistoryInteractor {
 
     fun clearSearchHistory()
 
-    interface SearchHistoryConsumer{
+    interface SearchHistoryConsumer {
         fun consume(historyTracks: ArrayList<Track>)
         fun onError(errorMessage: String)
     }

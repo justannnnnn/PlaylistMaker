@@ -8,15 +8,17 @@ import com.example.playlistmaker.domain.favorites.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.favorites.playlists.model.Playlist
 import kotlinx.coroutines.launch
 
-class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
+class PlaylistsViewModel(
+    private val playlistsInteractor: PlaylistsInteractor
+) : ViewModel() {
 
     private val playlistsLiveData = MutableLiveData<List<Playlist>>(emptyList())
     fun observePlaylistsState(): LiveData<List<Playlist>> = playlistsLiveData
 
-    fun getPlaylists(){
+    fun getPlaylists() {
         viewModelScope.launch {
             playlistsInteractor.getPlaylists()
-                .collect{
+                .collect {
                     playlistsLiveData.postValue(it)
                 }
         }

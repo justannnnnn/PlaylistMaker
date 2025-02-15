@@ -1,13 +1,10 @@
 package com.example.playlistmaker.data.converters
 
 import com.example.playlistmaker.data.db.TrackEntity
-import com.example.playlistmaker.data.search.dto.TrackDto
 import com.example.playlistmaker.domain.search.model.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class TrackDbConvertor {
-    fun map(track: Track): TrackEntity{
+    fun map(track: Track): TrackEntity {
         return TrackEntity(
             trackId = track.trackId,
             trackName = track.trackName,
@@ -36,5 +33,4 @@ class TrackDbConvertor {
             previewUrl = track.previewUrl
         )
     }
-
 }

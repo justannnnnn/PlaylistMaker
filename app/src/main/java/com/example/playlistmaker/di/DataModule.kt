@@ -14,8 +14,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val dataModule = module{
-    single<ITunesAPIService>{
+val dataModule = module {
+    single<ITunesAPIService> {
         Retrofit.Builder()
             .baseUrl("https://itunes.apple.com")
             .addConverterFactory(GsonConverterFactory.create())
@@ -23,17 +23,17 @@ val dataModule = module{
             .create(ITunesAPIService::class.java)
     }
 
-    single<ExternalNavigator>{
+    single<ExternalNavigator> {
         ExternalNavigatorImpl()
     }
 
     factory { Gson() }
 
-    single<NetworkClient>{
+    single<NetworkClient> {
         RetrofitNetworkClient(get())
     }
 
-    single{
+    single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             .build()

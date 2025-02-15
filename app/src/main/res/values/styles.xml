@@ -49,12 +49,25 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="SmallerMediumTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/smaller_medium_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="SmallestTextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/smallest_text_size</item>
         <item name="android:textAppearance">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textColor">?attr/colorSurface</item>
+    </style>
 
+    <style name="BoldBigTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/big_medium_text_size</item>
+        <item name="android:textAppearance">@font/ys_display_bold</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/black</item>
     </style>
     
     <style name="SettingsButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -74,7 +87,7 @@
 
     <style name="ImageButtonStyle" parent="Widget.MaterialComponents.TimePicker.ImageButton">
         <item name="tint">?attr/colorOnPrimary</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:clickable">true</item>
     </style>
 

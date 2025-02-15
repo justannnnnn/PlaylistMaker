@@ -6,13 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.model.Track
 
-class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>(){
+class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     var tracks = ArrayList<Track>()
     var onClickedTrack: ((Track) -> Unit)? = null
+    var onLongClickedTrack: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.track_item,
+            parent,
+            false
+        )
         return TrackViewHolder(view)
     }
 
@@ -21,13 +26,14 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>(){
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
 
-        holder.itemView.setOnClickListener { onClickedTrack?.invoke(tracks[position]) }
-
+        holder.itemView.setOnClickListener {
+            onClickedTrack?.invoke(tracks[position])
+        }
+        holder.itemView.setOnLongClickListener {
+            onLongClickedTrack?.invoke(tracks[position])
+            true
+        }
     }
-
-
-
-
 
 
 }

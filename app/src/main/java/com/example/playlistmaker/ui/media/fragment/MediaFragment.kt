@@ -10,8 +10,8 @@ import com.example.playlistmaker.databinding.FragmentMediaBinding
 import com.example.playlistmaker.ui.media.MediaViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MediaFragment: Fragment() {
-    private lateinit var binding : FragmentMediaBinding
+class MediaFragment : Fragment() {
+    private lateinit var binding: FragmentMediaBinding
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreateView(
@@ -31,8 +31,8 @@ class MediaFragment: Fragment() {
             lifecycle = lifecycle
         )
 
-        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager){ tab, position ->
-            when (position){
+        tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
                 0 -> tab.text = getString(R.string.liked_tracks)
                 1 -> tab.text = getString(R.string.playlists)
             }
