@@ -15,19 +15,23 @@ import com.example.playlistmaker.data.settings.impl.SettingsRepositoryImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val repositoryModule = module{
+val repositoryModule = module {
     single<SearchHistoryRepository> {
-        SearchHistoryRepositoryImpl(androidContext()
-            .getSharedPreferences("HISTORY_TRACKS", Context.MODE_PRIVATE), get())
+        SearchHistoryRepositoryImpl(
+            androidContext()
+                .getSharedPreferences("HISTORY_TRACKS", Context.MODE_PRIVATE), get()
+        )
     }
 
-    single<TrackRepository>{
+    single<TrackRepository> {
         TrackRepositoryImpl(get(), get())
     }
 
-    single<SettingsRepository>{
-        SettingsRepositoryImpl(androidContext()
-            .getSharedPreferences("playlist_prefs", Context.MODE_PRIVATE))
+    single<SettingsRepository> {
+        SettingsRepositoryImpl(
+            androidContext()
+                .getSharedPreferences("playlist_prefs", Context.MODE_PRIVATE)
+        )
     }
 
 
@@ -35,11 +39,11 @@ val repositoryModule = module{
         TrackDbConvertor()
     }
 
-    single<FavoritesRepository>{
+    single<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
     }
 
-    single<PlaylistsRepository>{
+    single<PlaylistsRepository> {
         PlaylistsRepositoryImpl(get(), get())
     }
 

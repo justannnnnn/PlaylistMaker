@@ -11,15 +11,15 @@ class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-    init{
+    init {
         this.setTheme(settingsInteractor.isDarkTheme())
     }
 
     fun getTheme() = settingsInteractor.isDarkTheme()
 
-    fun setTheme(isDark: Boolean){
+    fun setTheme(isDark: Boolean) {
         settingsInteractor.setTheme(isDark)
-        settingsInteractor.applyTheme(object: SettingsInteractor.ThemeConsumer{
+        settingsInteractor.applyTheme(object : SettingsInteractor.ThemeConsumer {
             override fun consume(isDark: Boolean) {
                 AppCompatDelegate.setDefaultNightMode(
                     if (isDark) AppCompatDelegate.MODE_NIGHT_YES
@@ -32,13 +32,12 @@ class SettingsViewModel(
     fun shareApp(): Intent {
         return sharingInteractor.shareApp()
     }
-    fun openSupport(): Intent{
+
+    fun openSupport(): Intent {
         return sharingInteractor.openSupport()
     }
 
-    fun openAgreement(): Intent{
+    fun openAgreement(): Intent {
         return sharingInteractor.openTerms()
     }
-
-
 }

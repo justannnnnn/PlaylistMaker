@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoritesFragment: Fragment() {
+class FavoritesFragment : Fragment() {
 
     private var isClickAllowed = true
     private val tracks = ArrayList<Track>()
@@ -32,7 +32,7 @@ class FavoritesFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,19 +41,19 @@ class FavoritesFragment: Fragment() {
         super.onCreate(savedInstanceState)
 
         viewModel.getFavoritesData()
-        viewModel.observeFavoritesState().observe(viewLifecycleOwner){
+        viewModel.observeFavoritesState().observe(viewLifecycleOwner) {
             render(it)
         }
 
-        onTrackClickDebounce = {track ->
-            if (clickDebounce()){
+        onTrackClickDebounce = { track ->
+            if (clickDebounce()) {
                 val bundle = Bundle().apply {
                     putSerializable("selected_track", track)
                 }
                 findNavController().navigate(R.id.action_mediaFragment_to_playerFragment, bundle)
             }
         }
-        adapter.onClickedTrack = {track ->
+        adapter.onClickedTrack = { track ->
             onTrackClickDebounce(track)
         }
 
@@ -66,15 +66,15 @@ class FavoritesFragment: Fragment() {
         viewModel.getFavoritesData()
     }
 
-    private fun buildRV(){
+    private fun buildRV() {
         adapter.tracks = tracks
         binding.favoritesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.favoritesRecyclerView.adapter = adapter
     }
 
-    private fun clickDebounce(): Boolean{
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
-        if (isClickAllowed){
+        if (isClickAllowed) {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
@@ -84,14 +84,14 @@ class FavoritesFragment: Fragment() {
         return current
     }
 
-    private fun render(state: FavoritesState){
-        when (state){
+    private fun render(state: FavoritesState) {
+        when (state) {
             is FavoritesState.Content -> showContent(state.tracks)
-            FavoritesState.isEmpty -> showEmpty()
+            FavoritesState.IsEmpty -> showEmpty()
         }
     }
 
-    private fun showContent(tracks: List<Track>){
+    private fun showContent(tracks: List<Track>) {
         binding.placeholderLL.visibility = View.GONE
         binding.favoritesRecyclerView.visibility = View.VISIBLE
 
@@ -100,12 +100,12 @@ class FavoritesFragment: Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun showEmpty(){
+    private fun showEmpty() {
         binding.favoritesRecyclerView.visibility = View.GONE
         binding.placeholderLL.visibility = View.VISIBLE
     }
 
-    companion object{
+    companion object {
         fun newInstance() = FavoritesFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

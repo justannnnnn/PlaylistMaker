@@ -45,8 +45,19 @@ class PlaylistsRepositoryImpl(
         appDatabase.playlistTracksDao().insertTrack(mapToPlaylistTrackEntity(track))
     }
 
-    override fun getPlaylistTrackById(trackId: Int): Flow<List<Int>> = flow{
-        emit(appDatabase.playlistTracksDao().getTrackById(trackId).map { it.trackId })
+    override fun getPlaylistTrackById(trackId: Int): Flow<List<Track>> = flow {
+        emit(
+            appDatabase.playlistTracksDao().getTrackById(trackId)
+                .map { mapFromPlaylistTrackEntity(it) })
+    }
+
+    override suspend fun deleteTrackFromPlaylist(track: Track) {
+        val playlists = mapFromPlaylistEntity(appDatabase.playlistDao().getPlaylists())
+        if (playlists.mapNotNull { playlist ->
+                playlist.tracks.find { it == track.trackId }
+            }.size == 1) {
+            appDatabase.playlistTracksDao().deleteTrack(mapToPlaylistTrackEntity(track))
+        }
     }
 
     private fun mapFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
@@ -80,9 +91,22 @@ class PlaylistsRepositoryImpl(
         trackTime = track.trackTime,
         artworkUrl100 = track.artworkUrl100,
         collectionName = track.collectionName,
-        releaseDate = track.collectionName,
+        releaseDate = track.releaseDate,
         primaryGenreName = track.primaryGenreName,
         country = track.country,
         previewUrl = track.previewUrl
+    )
+
+    private fun mapFromPlaylistTrackEntity(track: PlaylistTracksEntity) = Track(
+        trackId = track.trackId,
+        trackName = track.trackName,
+        artistName = track.artistName,
+        trackTime = track.trackTime ?: "00:00",
+        artworkUrl100 = track.artworkUrl100,
+        collectionName = track.collectionName,
+        releaseDate = track.releaseDate,
+        primaryGenreName = track.primaryGenreName,
+        country = track.country,
+        previewUrl = track.previewUrl,
     )
 }

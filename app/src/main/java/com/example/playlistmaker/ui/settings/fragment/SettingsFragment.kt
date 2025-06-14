@@ -9,7 +9,7 @@ import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment: Fragment() {
+class SettingsFragment : Fragment() {
     private val viewModel by viewModel<SettingsViewModel>()
 
     private lateinit var binding: FragmentSettingsBinding
@@ -41,9 +41,9 @@ class SettingsFragment: Fragment() {
         initializationSwitch()
     }
 
-    private fun initializationSwitch(){
+    private fun initializationSwitch() {
         binding.themeSwitcher.isChecked = viewModel.getTheme()
-        binding.themeSwitcher.setOnCheckedChangeListener{_, isChecked ->
+        binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             viewModel.setTheme(isChecked)
 
         }

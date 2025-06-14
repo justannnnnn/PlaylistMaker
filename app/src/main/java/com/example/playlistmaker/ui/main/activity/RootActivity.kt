@@ -8,7 +8,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
 
-class RootActivity: AppCompatActivity() {
+class RootActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRootBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,17 +17,20 @@ class RootActivity: AppCompatActivity() {
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView)
+                    as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener{_, destination, _ ->
-            when (destination.id){
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
                 R.id.newPlaylistFragment, R.id.playerFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
                     binding.border.visibility = View.GONE
                 }
+
                 else -> {
                     binding.bottomNavigationView.visibility = View.VISIBLE
                     binding.border.visibility = View.VISIBLE

@@ -6,12 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.favorites.playlists.model.Playlist
 
-class PlaylistGridAdapter: RecyclerView.Adapter<PlaylistGridViewHolder>() {
+class PlaylistGridAdapter : RecyclerView.Adapter<PlaylistGridViewHolder>() {
 
     var playlists = ArrayList<Playlist>()
+    var onClickedPlaylist: ((Playlist) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistGridViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.playlist_item_grid, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.playlist_item_grid,
+            parent,
+            false
+        )
         return PlaylistGridViewHolder(view)
     }
 
@@ -19,5 +24,6 @@ class PlaylistGridAdapter: RecyclerView.Adapter<PlaylistGridViewHolder>() {
 
     override fun onBindViewHolder(holder: PlaylistGridViewHolder, position: Int) {
         holder.bind(playlists[position])
+        holder.itemView.setOnClickListener { onClickedPlaylist?.invoke(playlists[position]) }
     }
 }

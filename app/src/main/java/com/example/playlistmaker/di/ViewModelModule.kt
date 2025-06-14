@@ -4,7 +4,9 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import com.example.playlistmaker.ui.media.favorites.view_model.FavoritesViewModel
+import com.example.playlistmaker.ui.media.playlists.new_playlist.view_model.EditPlaylistViewModel
 import com.example.playlistmaker.ui.media.playlists.new_playlist.view_model.NewPlaylistViewModel
+import com.example.playlistmaker.ui.media.playlists.playlist.view_model.PlaylistViewModel
 import com.example.playlistmaker.ui.media.playlists.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
@@ -13,37 +15,45 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val viewModelModule = module{
+val viewModelModule = module {
 
-    factory{
+    factory {
         Handler(Looper.getMainLooper())
     }
 
-    factory{
+    factory {
         MediaPlayer()
     }
 
-    viewModel{
+    viewModel {
         PlayerViewModel(get(), get(), get())
     }
 
-    viewModel{
+    viewModel {
         SearchViewModel(get(), get(), androidApplication())
     }
 
-    viewModel{
+    viewModel {
         SettingsViewModel(get(), get())
     }
 
-    viewModel{
+    viewModel {
         FavoritesViewModel(get())
     }
 
-    viewModel{
+    viewModel {
         PlaylistsViewModel(get())
     }
 
-    viewModel{
+    viewModel {
         NewPlaylistViewModel(get())
+    }
+
+    viewModel {
+        PlaylistViewModel(get(), get())
+    }
+
+    viewModel {
+        EditPlaylistViewModel(get())
     }
 }

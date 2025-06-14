@@ -14,7 +14,7 @@ import com.example.playlistmaker.ui.media.playlists.PlaylistGridAdapter
 import com.example.playlistmaker.ui.media.playlists.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment: Fragment() {
+class PlaylistsFragment : Fragment() {
 
     private val playlists = ArrayList<Playlist>()
     private val adapter: PlaylistGridAdapter = PlaylistGridAdapter()
@@ -35,7 +35,7 @@ class PlaylistsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getPlaylists()
-        viewModel.observePlaylistsState().observe(viewLifecycleOwner){
+        viewModel.observePlaylistsState().observe(viewLifecycleOwner) {
             render(it)
         }
 
@@ -43,17 +43,23 @@ class PlaylistsFragment: Fragment() {
             findNavController().navigate(R.id.action_mediaFragment_to_newPlaylistFragment)
         }
 
+        adapter.onClickedPlaylist = { playlist ->
+            val bundle = Bundle().apply {
+                putSerializable("selected_playlist", playlist)
+            }
+            findNavController().navigate(R.id.action_mediaFragment_to_playlistFragment, bundle)
+        }
         buildRV()
     }
 
-    private fun buildRV(){
+    private fun buildRV() {
         adapter.playlists = playlists
         binding.playlistRV.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playlistRV.adapter = adapter
     }
 
-    private fun render(playlists: List<Playlist>){
-        if (playlists.isEmpty()){
+    private fun render(playlists: List<Playlist>) {
+        if (playlists.isEmpty()) {
             binding.placeholderLL.visibility = View.VISIBLE
             binding.playlistRV.visibility = View.GONE
         } else {
@@ -65,7 +71,7 @@ class PlaylistsFragment: Fragment() {
         }
     }
 
-    companion object{
+    companion object {
         fun newInstance() = PlaylistsFragment()
     }
 }

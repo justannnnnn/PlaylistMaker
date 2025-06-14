@@ -9,22 +9,22 @@ import kotlinx.coroutines.withContext
 
 class RetrofitNetworkClient(
     private val itunesService: ITunesAPIService
-): NetworkClient {
+) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
         if (dto is TrackSearchRequest) {
-            return withContext(Dispatchers.IO){
+            return withContext(Dispatchers.IO) {
                 try {
                     val response = itunesService.searchSongs(dto.expr)
                     response.apply { resultCode = 200 }
                 } catch (e: Exception) {
-                    TrackSearchResponse("", dto.expr, ArrayList()).apply {
+                    TrackSearchResponse(ArrayList()).apply {
                         resultCode = -1
                     }
                 }
             }
         } else {
-            return TrackSearchResponse("", dto.toString(), ArrayList()).apply {
+            return TrackSearchResponse(ArrayList()).apply {
                 resultCode = 400
             }
         }

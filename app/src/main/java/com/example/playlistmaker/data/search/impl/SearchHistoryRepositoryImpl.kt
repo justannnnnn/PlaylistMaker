@@ -1,28 +1,28 @@
 package com.example.playlistmaker.data.search.impl
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.search.SearchHistoryRepository
-import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.Gson
 
 class SearchHistoryRepositoryImpl(
     private val prefs: SharedPreferences,
-    private val gson : Gson,
-): SearchHistoryRepository {
+    private val gson: Gson,
+) : SearchHistoryRepository {
 
     private val historyTracks = ArrayList<Track>()
 
-    init{
+    init {
         val str = prefs.getString(LIST_KEY, "")
-        if (!str.isNullOrEmpty()) historyTracks.addAll(gson.fromJson(str, Array<Track>::class.java).toList())
+        if (!str.isNullOrEmpty()) historyTracks.addAll(
+            gson.fromJson(str, Array<Track>::class.java).toList()
+        )
     }
 
     override fun saveSearchHistory(track: Track) {
         if (track in historyTracks) historyTracks.remove(track)
         else if (historyTracks.size == 10) {
-            historyTracks.removeLast()
+            historyTracks.removeAt(historyTracks.lastIndex)
         }
         historyTracks.add(0, track.copy())
         prefs.edit().putString(LIST_KEY, gson.toJson(historyTracks)).apply()
@@ -38,7 +38,7 @@ class SearchHistoryRepositoryImpl(
         prefs.edit().remove(LIST_KEY).apply()
     }
 
-        private companion object {
+    private companion object {
         // search history
         const val LIST_KEY = "LIST_KEY" // search history list
     }
