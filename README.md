@@ -25,4 +25,4 @@ UI: XML
 
 База данных: Room
 
-DI: Hilt
+DI: Koin
